@@ -1,0 +1,57 @@
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.alert-box {
+  position: absolute;
+  bottom: 15rem;
+  left: 8rem;
+  width: 30rem;
+  height: 15rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.alert-box-video {
+  width: 100%;
+}
+
+.alert-box-text {
+  color: coral;
+  font-family: "Montserrat", sans-serif;
+  position: relative;
+  margin-top: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  -webkit-box-reflect: below -1rem linear-gradient(transparent, rgba(0, 0, 0, 0.2));
+}
+
+.alert-box-text span {
+  position: relative;
+  display: inline-block;
+  color: cornflowerblue;
+  font-size: 2.25rem;
+  text-transform: uppercase;
+  animation: animate 1.5s ease-in-out infinite;
+  animation-delay: calc(0.1s * var(--i));
+}
+
+@keyframes animate {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  20% {
+    transform: translateY(-20px);
+  }
+  40% {
+    transform: translateY(0px);
+  }
+}
