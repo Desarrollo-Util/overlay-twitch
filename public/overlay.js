@@ -1,5 +1,6 @@
 const socket = io("http://localhost:3005");
 const alertBox = document.getElementById("alert-box");
+const followVideos = ["Soy programador.mp4", "Agente internacional.mp4"];
 
 //#region Functions
 
@@ -31,12 +32,10 @@ const createAlertText = (username) => {
   return textBox;
 };
 
-//#endregion
-
-//#region Events
-
-socket.on("follow", (username) => {
-  const video = createAlertVideo("/video/Soy programador.mp4");
+function showAlert(username) {
+  const video = createAlertVideo(
+    `/video/${followVideos[Math.floor(Math.random() * followVideos.length)]}`
+  );
   const textBox = createAlertText(username);
 
   alertBox.appendChild(video);
@@ -47,9 +46,28 @@ socket.on("follow", (username) => {
 
     alertBox.removeChild(video);
     alertBox.removeChild(textBox);
+
+    if (eventList.length) showAlert(eventList.shift());
+    else alertFlag = false;
   }
 
   video.addEventListener("ended", deleteAlert);
+}
+
+//#endregion
+
+//#region Events
+
+let alertFlag = false;
+const eventList = [];
+
+socket.on("follow", (username) => {
+  if (!alertFlag) {
+    alertFlag = true;
+    showAlert(username);
+  } else {
+    eventList.push(username);
+  }
 });
 
 //#endregion
