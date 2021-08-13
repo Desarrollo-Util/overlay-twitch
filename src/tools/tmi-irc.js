@@ -14,10 +14,10 @@ const TMIOPTIONS = {
   channels: [process.env.USERNAME],
 };
 
-const startTmi = (socketServer) => {
+const initializeTmi = () => {
   const client = new tmi.client(TMIOPTIONS);
 
   client.connect();
 };
 
-module.exports = startTmi;
+module.exports = initializeTmi;

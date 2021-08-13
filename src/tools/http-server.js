@@ -14,7 +14,7 @@ const initializeHttp = () => {
   app.use(express.static(join(__dirname, "../../public")));
 
   httpServer.listen(process.env.PORT, () => {
-    console.log(`Listening on *:${process.env.PORT}`);
+    console.log(`Listening on port *:${process.env.PORT}`);
   });
 
   return httpServer;

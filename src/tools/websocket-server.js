@@ -4,7 +4,7 @@ const initializeSocket = (httpServer) => {
   const socketServer = new Server(httpServer);
 
   socketServer.on("connection", (socket) => {
-    console.log("A user has connected to socket");
+    console.log(`A user with socket id ${socket.id} has connected`);
   });
 
   return socketServer;

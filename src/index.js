@@ -1,15 +1,16 @@
 require("dotenv").config();
-const initializeHttp = require("./lib/http-server");
-const initializeSocket = require("./lib/websocket-server");
-const startTmi = require("./lib/twitch-tmi-irc");
-const startEventSub = require("./lib/twitch-event-sub");
+const initializeHttp = require("./tools/http-server");
+const initializeSocket = require("./tools/websocket-server");
+const initializeTmi = require("./tools/tmi-irc");
+const startWebSockets = require("./lib/twitch-socket-events");
 
 //#region Initialization
 
 const httpServer = initializeHttp();
 const socketServer = initializeSocket(httpServer);
+const tmiClient = initializeTmi();
+const { twitchApiClient, twitchEventListener } = initializeTwitchAPI();
 
 //#endregion
 
-startTmi(socketServer);
-startEventSub(socketServer);
+startWebSockets(twitchApiClient, twitchEventListener, socketServer);
