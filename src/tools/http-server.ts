@@ -1,9 +1,10 @@
-const express = require("express");
-const http = require("http");
-const { join } = require("path");
+import express from "express";
+import http from "http";
+import { join } from "path";
 
 const initializeHttp = () => {
-  process.stdout.write("\033c");
+  console.clear();
+
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -13,11 +14,11 @@ const initializeHttp = () => {
 
   app.use(express.static(join(__dirname, "../../public")));
 
-  httpServer.listen(process.env.PORT, () => {
-    console.log(`Listening on port *:${process.env.PORT}`);
+  httpServer.listen(process.env["PORT"], () => {
+    console.log(`Listening on port *:${process.env["PORT"]}`);
   });
 
   return httpServer;
 };
 
-module.exports = initializeHttp;
+export default initializeHttp;
