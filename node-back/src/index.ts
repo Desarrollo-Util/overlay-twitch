@@ -16,7 +16,9 @@ const startServer = async () => {
 
   //#endregion
 
-  startWebSockets(twitchApiClient, twitchEventListener, socketServer);
+  await startWebSockets(twitchApiClient, twitchEventListener, socketServer);
+
+  console.log("Server is ready");
 };
 
 startServer();

@@ -1,0 +1,7 @@
+body {
+  @apply w-screen h-screen;
+}
+
+.main {
+  @apply w-full h-full;
+}

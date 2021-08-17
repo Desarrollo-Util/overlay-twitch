@@ -1,3 +1,4 @@
+import {} from "fs/promises";
 import { Server as SocketServer } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { EventSubListener } from "twitch-eventsub/lib";
