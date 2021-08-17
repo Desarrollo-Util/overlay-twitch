@@ -1,26 +1,26 @@
 .alertbox {
-  @apply absolute bottom-24 left-8 w-30 flex flex-wrap;
+	@apply fixed bottom-24 left-14 w-30 flex flex-wrap;
 }
 
 .message-alertbox {
-  @apply mt-1_5 text-20 font-bold relative text-red-400;
-  font-family: "Montserrat", sans-serif;
+	@apply mt-1_5 text-20 font-bold relative text-red-400;
+	font-family: 'Montserrat', sans-serif;
 }
 
 .username-message-alertbox {
-  @apply relative inline-block uppercase text-24;
-  animation: animate 1.5s ease-in-out infinite;
+	@apply relative inline-block uppercase text-24;
+	animation: animate 1.5s ease-in-out infinite;
 }
 
 @keyframes animate {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  20% {
-    transform: translateY(-20px);
-  }
-  40% {
-    transform: translateY(0px);
-  }
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+	20% {
+		transform: translateY(-20px);
+	}
+	40% {
+		transform: translateY(0px);
+	}
 }
