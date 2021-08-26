@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import AlertBox from './components/alert-box';
 import MemeBox from './components/meme-box';
 
-const socket = io('ws://localhost:3005');
+const socket = io('ws://localhost:3001');
 
 const App: FC = () => {
 	return (

@@ -3,16 +3,16 @@ import { client as TmiClient, Options as TmiOptions } from 'tmi.js';
 const initializeTmi = async () => {
 	const TMIOPTIONS: TmiOptions = {
 		options: {
-			debug: false,
+			debug: true,
 		},
 		connection: {
 			reconnect: true,
 		},
 		identity: {
-			username: process.env['USERNAME'],
+			username: process.env['TWTICH_USERNAME'],
 			password: process.env['PASSWORD'],
 		},
-		channels: [process.env['USERNAME'] as string],
+		channels: [process.env['TWTICH_USERNAME'] as string],
 	};
 
 	const client = new TmiClient(TMIOPTIONS);

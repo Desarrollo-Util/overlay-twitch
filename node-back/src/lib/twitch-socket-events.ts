@@ -14,10 +14,11 @@ const startWebSockets = async (
 	>
 ) => {
 	const user = await twitchApiClient.helix.users.getUserByName(
-		process.env['USERNAME'] as string
+		process.env['TWTICH_USERNAME'] as string
 	);
 
-	if (!user) throw new Error(`${process.env['USERNAME']} user not found`);
+	if (!user)
+		throw new Error(`${process.env['TWTICH_USERNAME']} user not found`);
 
 	twitchEventListener.subscribeToChannelFollowEvents(
 		user.id,
