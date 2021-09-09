@@ -33,7 +33,7 @@ const startServer = async () => {
 	//#endregion
 
 	await startWebSockets(twitchApiClient, twitchEventListener, socketServer);
-	startChat(chatBot, socketServer);
+	startChat(chatBot, socketServer, twitchApiClient);
 
 	console.log('Server is ready');
 };
