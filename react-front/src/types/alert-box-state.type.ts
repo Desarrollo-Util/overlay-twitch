@@ -1,18 +1,21 @@
-import { AlertTypes } from './alert-types.type';
+import { AlertTypes } from './alert-types.enum';
 
-export type AlertBoxState = {
-	actualEvent?: AlertBoxEvent;
-	eventList: Array<AlertBoxEvent>;
+export type QueueBoxState<QueueBoxEvent> = {
+	actualEvent?: QueueBoxEvent;
+	eventList: Array<QueueBoxEvent>;
 };
 
-export type MemeBoxState = {
-	actualEvent?: string;
-	eventList: Array<string>;
+export type BoxEvent = {
+	id: string;
 };
 
 export type AlertBoxEvent = {
-	id: string;
-	type: AlertTypes;
+	type: AlertTypes.FOLLOW;
 	username: string;
-	message?: string;
-};
+} & BoxEvent;
+
+export type MemeBoxEvent = {
+	type: AlertTypes.MEME;
+} & BoxEvent;
+
+export type QueueBoxEvent = AlertBoxEvent | MemeBoxEvent;
