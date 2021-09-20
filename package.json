@@ -4,10 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "cd node-back && node src/index.js",
 		"dev-back": "cd node-back && cpy \"src/resources/frases.json\" \"../dist/resources/\" && tsc-watch --onSuccess \"node -r ./tsconfig-paths-bootstrap.js ../dist/index.js\"",
 		"dev-front": "cd react-front && vite --host",
-		"build-front": "cd react-front && tsc && vite build"
+		"build-front": "cd react-front && tsc && vite build",
+		"serve-front": "cd react-front && vite preview --port 3000"
 	},
 	"keywords": [],
 	"author": "",
