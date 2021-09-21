@@ -1,62 +1,66 @@
+import { addPhrase, getRandomPhrase } from '@Lib/phrases';
 import { ChatClient } from '@twurple/chat';
 import { TwitchPrivateMessage } from '@twurple/chat/lib/commands/TwitchPrivateMessage';
-import { copyFile, readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
 import { Server } from 'socket.io';
 
-const PHRASE_FILE_PATH = join(__dirname, '../../resources/frases.json');
-const PHRASE_SRC_FILE_PATH = join(
-	__dirname,
-	'../../../node-back/src/resources/frases.json'
-);
-
 const chatMessageHandler = (chatBot: ChatClient, socketServer: Server) => {
+	const channel = process.env['TWITCH_CHANNEL'] as string;
+
+	const commonCommandHandlers: Record<string, () => Promise<void>> = {
+		frase: async () => {
+			const phrase = await getRandomPhrase();
+			chatBot.say(channel, `/me ${phrase}`);
+		},
+	};
+
+	const modCommandHandlers: Record<string, (message: string) => Promise<void>> =
+		{
+			addfrase: addPhrase,
+			promo: async (message: string) => {
+				const messageSplitted = message.split(' ');
+				const channelToPromote = messageSplitted[1];
+
+				if (channelToPromote && messageSplitted.length === 2) {
+					await chatBot.say(
+						channel,
+						`/me La promosió de este bellísimo canal, seguidle y dadle cariño -> https://twitch.tv/${channelToPromote}`
+					);
+				}
+			},
+		};
+
 	return async (
-		channel: string,
+		_channel: string,
 		userName: string,
 		message: string,
 		info: TwitchPrivateMessage
 	) => {
-		if (/explorer/i.test(message)) {
+		const isMod =
+			info.userInfo.isMod || userName === process.env['TWITCH_CHANNEL'];
+		const isCommandRegex = /^![a-zA-Z]+\s*/g;
+		const isCommand = message.match(isCommandRegex);
+
+		if (isCommand) {
+			const command = (isCommand[0] as string).replace('!', '').trimEnd();
+			const handler = commonCommandHandlers[command];
+
+			if (handler) await handler();
+			else if (isMod) {
+				const modHandler = modCommandHandlers[command];
+				const messageText = message
+					.replace(isCommand[0] as string, '')
+					.trimEnd();
+				if (modHandler) await modHandler(messageText);
+			}
+		}
+
+		if (message.includes('explorer')) {
 			setTimeout(
 				() => socketServer.emit('meme'),
 				Math.floor(Math.random() * 1000 * 10) + 5000
 			);
 		}
-
-		if (/^!frase$/i.test(message)) {
-			const phrase = await getRandomPhrase();
-			chatBot.say(channel, `/me ${phrase}`);
-		}
-
-		if (/^!frase /i.test(message)) {
-			if (info.userInfo.isMod || userName === process.env['TWITCH_CHANNEL']) {
-				const newPhrase = message.split('!frase ')[1]?.trim();
-				if (newPhrase) await addPhrase(newPhrase);
-			}
-		}
 	};
 };
 
 export default chatMessageHandler;
-
-const getRandomPhrase = async (): Promise<string> => {
-	const frasesString = await readFile(PHRASE_FILE_PATH, {
-		encoding: 'utf-8',
-	});
-
-	const { frases } = JSON.parse(frasesString);
-	return frases[Math.floor(Math.random() * frases.length)];
-};
-
-const addPhrase = async (phrase: string): Promise<void> => {
-	const frasesString = await readFile(PHRASE_FILE_PATH, {
-		encoding: 'utf-8',
-	});
-
-	const frases = JSON.parse(frasesString);
-	frases.frases.push(phrase);
-
-	await writeFile(PHRASE_FILE_PATH, JSON.stringify(frases));
-	await copyFile(PHRASE_FILE_PATH, PHRASE_SRC_FILE_PATH);
-};

@@ -14,8 +14,14 @@ export type AlertBoxEvent = {
 	username: string;
 } & BoxEvent;
 
+export type BeerBoxEvent = {
+	type: AlertTypes.BEER;
+	username: string;
+	message: string;
+} & BoxEvent;
+
 export type MemeBoxEvent = {
 	type: AlertTypes.MEME;
 } & BoxEvent;
 
-export type QueueBoxEvent = AlertBoxEvent | MemeBoxEvent;
+export type QueueBoxEvent = AlertBoxEvent | BeerBoxEvent | MemeBoxEvent;

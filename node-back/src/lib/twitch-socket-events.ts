@@ -44,14 +44,13 @@ const startWebSockets = async (
 	await twitchEventListener.subscribeToChannelRedemptionAddEventsForReward(
 		user.id,
 		'78e45fd3-91e6-40be-bc5e-c9ec84152ffb',
-		({ input }: EventSubChannelRedemptionAddEvent) => {
-			console.log(input);
+		({ input, userDisplayName }: EventSubChannelRedemptionAddEvent) => {
+			socketServer.emit('beer', {
+				userName: userDisplayName,
+				message: input,
+			});
 		}
 	);
-
-	const hypeTrain =
-		await twitchApiClient.hypeTrain.getHypeTrainEventsForBroadcaster(user.id);
-	console.log(hypeTrain);
 };
 
 export default startWebSockets;
