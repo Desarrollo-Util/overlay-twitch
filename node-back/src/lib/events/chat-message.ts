@@ -1,4 +1,4 @@
-import { ChatClient } from '@twurple/chat/lib';
+import { ChatClient } from '@twurple/chat';
 import { TwitchPrivateMessage } from '@twurple/chat/lib/commands/TwitchPrivateMessage';
 import { copyFile, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';

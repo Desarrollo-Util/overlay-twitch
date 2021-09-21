@@ -1,5 +1,5 @@
-import { ApiClient } from '@twurple/api/lib';
-import { ChatClient, ChatRaidInfo, UserNotice } from '@twurple/chat/lib';
+import { ApiClient } from '@twurple/api';
+import { ChatClient, ChatRaidInfo, UserNotice } from '@twurple/chat';
 
 const raidHandler = (chatBot: ChatClient, twitchApiClient: ApiClient) => {
 	return async (

@@ -48,6 +48,10 @@ const startWebSockets = async (
 			console.log(input);
 		}
 	);
+
+	const hypeTrain =
+		await twitchApiClient.hypeTrain.getHypeTrainEventsForBroadcaster(user.id);
+	console.log(hypeTrain);
 };
 
 export default startWebSockets;

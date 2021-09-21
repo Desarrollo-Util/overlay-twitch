@@ -1,4 +1,4 @@
-import { RefreshingAuthProvider } from '@twurple/auth/lib';
+import { RefreshingAuthProvider } from '@twurple/auth';
 import { ChatClient } from '@twurple/chat';
 
 const initializeChatBot = async (appAuthProvider: RefreshingAuthProvider) => {

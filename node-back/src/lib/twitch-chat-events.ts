@@ -1,5 +1,5 @@
-import { ApiClient } from '@twurple/api/lib';
-import { ChatClient } from '@twurple/chat/lib';
+import { ApiClient } from '@twurple/api';
+import { ChatClient } from '@twurple/chat';
 import { Server } from 'socket.io';
 import chatMessageHandler from './events/chat-message';
 import raidHandler from './events/raid';

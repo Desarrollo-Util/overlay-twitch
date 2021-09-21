@@ -1,15 +1,19 @@
 import startChat from '@Lib/twitch-chat-events';
 import startWebSockets from '@Lib/twitch-socket-events';
 import initializeHttp from '@Tools/http-server';
-import initializeTwitchAPI from '@Tools/twitch-api';
-import getTwitchAuth from '@Tools/twitch-auth';
-import initializeChatBot from '@Tools/twitch-chat';
+import getTwitchApiClient from '@Tools/twitch-api-client';
+import {
+	getAppAuthProvider,
+	getRefreshableAuthProvider,
+} from '@Tools/twitch-auth';
+import initializeChatBot from '@Tools/twitch-chat-client';
+import getTwitchEventClient from '@Tools/twitch-event-client';
 import initializeSocket from '@Tools/websocket-server';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const startServer = async () => {
-	console.clear();
 	//#region Initialization
 
 	const CLIENT_ID = process.env['CLIENT_ID'] as string;
@@ -17,18 +21,18 @@ const startServer = async () => {
 	const CLIENT_CODE = process.env['CLIENT_CODE'] as string;
 	const REDIRECT_URI = process.env['REDIRECT_URI'] as string;
 
-	const { appAuthProvider, refreshingAuthProvider } = await getTwitchAuth(
+	const appAuthProvider = await getAppAuthProvider(CLIENT_ID, CLIENT_SECRET);
+	const refreshableAuthProvider = await getRefreshableAuthProvider(
 		CLIENT_ID,
 		CLIENT_SECRET,
 		CLIENT_CODE,
 		REDIRECT_URI
 	);
 
-	const { twitchApiClient, twitchEventListener } = await initializeTwitchAPI(
-		appAuthProvider
-	);
+	const twitchApiClient = await getTwitchApiClient(refreshableAuthProvider);
+	const twitchEventListener = await getTwitchEventClient(appAuthProvider);
+	const chatBot = await initializeChatBot(refreshableAuthProvider);
 
-	const chatBot = await initializeChatBot(refreshingAuthProvider);
 	const httpServer = initializeHttp();
 	const socketServer = initializeSocket(httpServer);
 

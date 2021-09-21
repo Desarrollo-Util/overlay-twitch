@@ -3,26 +3,23 @@ import { ClientCredentialsAuthProvider } from '@twurple/auth/lib';
 import { EventSubListener } from '@twurple/eventsub';
 import { NgrokAdapter } from '@twurple/eventsub-ngrok';
 
-const initializeTwitchAPI = async (
-	twitchAuthProvider: ClientCredentialsAuthProvider
+const getTwitchEventClient = async (
+	appAuthProvider: ClientCredentialsAuthProvider
 ) => {
-	const twitchApiClient = new ApiClient({ authProvider: twitchAuthProvider });
+	const twitchApiClient = new ApiClient({ authProvider: appAuthProvider });
+	await twitchApiClient.eventSub.deleteAllSubscriptions();
+
 	const twitchEventListener = new EventSubListener({
 		apiClient: twitchApiClient,
 		adapter: new NgrokAdapter(),
 		secret: process.env['WEBHOOK_SECRET'] as string,
 	});
 
-	await twitchApiClient.eventSub.deleteAllSubscriptions();
-
 	await twitchEventListener.listen();
 
 	removeListenerOnShutdown(twitchEventListener);
 
-	return {
-		twitchApiClient,
-		twitchEventListener,
-	};
+	return twitchEventListener;
 };
 
 const removeListenerOnShutdown = (twitchEventListener: EventSubListener) =>
@@ -31,4 +28,4 @@ const removeListenerOnShutdown = (twitchEventListener: EventSubListener) =>
 		process.exit(0);
 	});
 
-export default initializeTwitchAPI;
+export default getTwitchEventClient;
