@@ -1,5 +1,8 @@
 import { ApiClient } from '@twurple/api';
-import { EventSubListener } from '@twurple/eventsub';
+import {
+	EventSubChannelRedemptionAddEvent,
+	EventSubListener,
+} from '@twurple/eventsub';
 import {} from 'fs/promises';
 import { Server as SocketServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
@@ -35,6 +38,14 @@ const startWebSockets = async (
 				message: messageText,
 				months: cumulativeMonths,
 			});
+		}
+	);
+
+	await twitchEventListener.subscribeToChannelRedemptionAddEventsForReward(
+		user.id,
+		'78e45fd3-91e6-40be-bc5e-c9ec84152ffb',
+		({ input }: EventSubChannelRedemptionAddEvent) => {
+			console.log(input);
 		}
 	);
 };

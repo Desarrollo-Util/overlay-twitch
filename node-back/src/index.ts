@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const startServer = async () => {
+	console.clear();
 	//#region Initialization
 
 	const CLIENT_ID = process.env['CLIENT_ID'] as string;
@@ -26,6 +27,7 @@ const startServer = async () => {
 	const { twitchApiClient, twitchEventListener } = await initializeTwitchAPI(
 		appAuthProvider
 	);
+
 	const chatBot = await initializeChatBot(refreshingAuthProvider);
 	const httpServer = initializeHttp();
 	const socketServer = initializeSocket(httpServer);

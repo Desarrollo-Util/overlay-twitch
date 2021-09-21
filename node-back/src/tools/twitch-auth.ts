@@ -13,7 +13,12 @@ import {
 	TwitchErrorResponse,
 } from 'types/twitch-auth.type';
 
-const TWITCH_SCOPES = ['channel:read:subscriptions', 'chat:read', 'chat:edit'];
+const TWITCH_SCOPES = [
+	'channel:read:subscriptions',
+	'channel:read:redemptions',
+	'chat:read',
+	'chat:edit',
+];
 
 const getTwitchAuth = async (
 	CLIENT_ID: string,
