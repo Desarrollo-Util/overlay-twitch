@@ -13,6 +13,7 @@ const TWITCH_SCOPES = [
 	'channel:read:redemptions',
 	'chat:read',
 	'chat:edit',
+	'whispers:edit',
 ];
 
 export const getRefreshableAuthProvider = async (
