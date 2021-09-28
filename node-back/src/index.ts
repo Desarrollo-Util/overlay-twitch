@@ -36,12 +36,22 @@ const startServer = async () => {
 	const httpServer = initializeHttp();
 	const socketServer = initializeSocket(httpServer);
 
+	// const user = await twitchApiClient.users.getUserByName(
+	// 	process.env['TWITCH_CHANNEL'] as string
+	// );
+
+	// if (user) {
+	// 	const SUBSCRIPTIONS =
+	// 		await twitchApiClient.subscriptions.getSubscriptions(user.id);
+	// }
 	//#endregion
 
 	await startWebSockets(twitchApiClient, twitchEventListener, socketServer);
 	startChat(chatBot, socketServer, twitchApiClient);
 
-	console.log('Server is ready');
+	httpServer.listen(process.env['PORT'], () => {
+		console.log(`Server is ready, listening on port *:${process.env['PORT']}`);
+	});
 };
 
 startServer();

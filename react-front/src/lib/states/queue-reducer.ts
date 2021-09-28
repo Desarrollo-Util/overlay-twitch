@@ -2,16 +2,18 @@ import { useState } from 'react';
 import { QueueBoxEvent, QueueBoxState } from '../../types/alert-box-state.type';
 
 const queueReducer = () => {
-	const [queueBoxState, setQueueBoxState] = useState<QueueBoxState<QueueBoxEvent>>({
-		actualEvent: undefined,
+	const [queueBoxState, setQueueBoxState] = useState<
+		QueueBoxState<QueueBoxEvent>
+	>({
+		currentEvent: undefined,
 		eventList: [],
 	});
 
 	const addNewEvent = (newEvent: QueueBoxEvent) => {
 		setQueueBoxState(prevState => {
-			if (!prevState.actualEvent)
+			if (!prevState.currentEvent)
 				return {
-					actualEvent: newEvent,
+					currentEvent: newEvent,
 					eventList: [],
 				};
 			else {
@@ -28,7 +30,7 @@ const queueReducer = () => {
 			const prevEventList = [...prevState.eventList];
 
 			return {
-				actualEvent: prevEventList.shift(),
+				currentEvent: prevEventList.shift(),
 				eventList: prevEventList,
 			};
 		});

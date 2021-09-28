@@ -1,7 +1,7 @@
 import { AlertTypes } from './alert-types.enum';
 
 export type QueueBoxState<QueueBoxEvent> = {
-	actualEvent?: QueueBoxEvent;
+	currentEvent?: QueueBoxEvent;
 	eventList: Array<QueueBoxEvent>;
 };
 

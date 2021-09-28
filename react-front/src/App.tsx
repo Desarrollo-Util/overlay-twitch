@@ -32,30 +32,30 @@ const App: FC = () => {
 	const renderAlerts = useMemo(
 		() => (
 			<>
-				{queueBoxState.actualEvent &&
-					queueBoxState.actualEvent.type === AlertTypes.FOLLOW && (
+				{queueBoxState.currentEvent &&
+					queueBoxState.currentEvent.type === AlertTypes.FOLLOW && (
 						<AlertBox
-							actualEvent={queueBoxState.actualEvent}
+							actualEvent={queueBoxState.currentEvent}
 							onEnd={nextEvent}
 						/>
 					)}
-				{queueBoxState.actualEvent &&
-					queueBoxState.actualEvent.type === AlertTypes.MEME && (
+				{queueBoxState.currentEvent &&
+					queueBoxState.currentEvent.type === AlertTypes.MEME && (
 						<MemeBox
-							actualEvent={queueBoxState.actualEvent}
+							actualEvent={queueBoxState.currentEvent}
 							onEnd={nextEvent}
 						/>
 					)}
-				{queueBoxState.actualEvent &&
-					queueBoxState.actualEvent.type === AlertTypes.BEER && (
+				{queueBoxState.currentEvent &&
+					queueBoxState.currentEvent.type === AlertTypes.BEER && (
 						<BeerBox
-							actualEvent={queueBoxState.actualEvent}
+							actualEvent={queueBoxState.currentEvent}
 							onEnd={nextEvent}
 						/>
 					)}
 			</>
 		),
-		[queueBoxState.actualEvent]
+		[queueBoxState.currentEvent]
 	);
 
 	return <>{renderAlerts}</>;

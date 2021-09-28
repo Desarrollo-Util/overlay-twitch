@@ -1,6 +1,8 @@
 import { addPhrase, getRandomPhrase } from '@Lib/phrases';
 import { ChatClient } from '@twurple/chat/lib';
+import got from 'got';
 import { GetCommandHandlers } from 'types/command-handlers.type';
+import { TwitchTmiBody } from 'types/twitch-tmi-chatters';
 
 export const getCommonCommandHandlers: GetCommandHandlers = (
 	channel: string,
@@ -11,7 +13,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 		await chatBot.say(channel, `/me ${phrase}`);
 	},
 	git: async () => {
-		await chatBot.say(channel, '/me https://github.com/DesarrolloUtil');
+		await chatBot.say(channel, '/me https://github.com/Desarrollo-Util');
 	},
 	theme: async () => {
 		await chatBot.say(
@@ -37,10 +39,24 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 			'Música que solemos reproducir en el canal https://www.pretzel.rocks'
 		);
 	},
-	help: async () => {
+	culpa: async () => {
+		const { body } = await got.get(
+			`https://tmi.twitch.tv/group/user/${channel}/chatters`,
+			{ responseType: 'json', }
+		);
+		const { viewers } = (body as TwitchTmiBody).chatters;
+
 		await chatBot.say(
 			channel,
-			'Comandos disponibles: !frase !git !theme !discord !youtube !music'
+			`La culpa de esto es de @${
+				viewers[Math.floor(Math.random() * viewers.length)]
+			}`
+		);
+	},
+	help: async function help(){
+		await chatBot.say(
+			channel,
+			'Comandos disponibles: !frase !git !theme !discord !youtube !music !culpa'
 		);
 	},
 });
