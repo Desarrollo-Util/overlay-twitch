@@ -1,3 +1,4 @@
+import startEndpoints from '@Lib/endpoints';
 import startChat from '@Lib/twitch-chat-events';
 import startWebSockets from '@Lib/twitch-socket-events';
 import initializeHttp from '@Tools/http-server';
@@ -10,6 +11,7 @@ import initializeChatBot from '@Tools/twitch-chat-client';
 import getTwitchEventClient from '@Tools/twitch-event-client';
 import initializeSocket from '@Tools/websocket-server';
 import dotenv from 'dotenv';
+import info from 'info';
 
 dotenv.config();
 
@@ -33,20 +35,17 @@ const startServer = async () => {
 	const twitchEventListener = await getTwitchEventClient(appAuthProvider);
 	const chatBot = await initializeChatBot(refreshableAuthProvider);
 
-	const httpServer = initializeHttp();
+	const { app, httpServer } = initializeHttp();
 	const socketServer = initializeSocket(httpServer);
 
-	// const user = await twitchApiClient.users.getUserByName(
-	// 	process.env['TWITCH_CHANNEL'] as string
-	// );
-
-	// if (user) {
-	// 	const SUBSCRIPTIONS =
-	// 		await twitchApiClient.subscriptions.getSubscriptions(user.id);
-	// }
 	//#endregion
 
-	await startWebSockets(twitchApiClient, twitchEventListener, socketServer);
+	info.USER = await twitchApiClient.users.getUserByName(
+		process.env['TWITCH_CHANNEL'] as string
+	);
+
+	await startEndpoints(app, twitchApiClient);
+	await startWebSockets(twitchEventListener, socketServer);
 	startChat(chatBot, socketServer, twitchApiClient);
 
 	httpServer.listen(process.env['PORT'], () => {

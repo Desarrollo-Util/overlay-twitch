@@ -1,14 +1,13 @@
-import { ApiClient } from '@twurple/api';
 import {
 	EventSubChannelRedemptionAddEvent,
 	EventSubListener,
 } from '@twurple/eventsub';
 import {} from 'fs/promises';
+import info from 'info';
 import { Server as SocketServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 const startWebSockets = async (
-	twitchApiClient: ApiClient,
 	twitchEventListener: EventSubListener,
 	socketServer: SocketServer<
 		DefaultEventsMap,
@@ -16,9 +15,7 @@ const startWebSockets = async (
 		DefaultEventsMap
 	>
 ) => {
-	const user = await twitchApiClient.users.getUserByName(
-		process.env['TWITCH_CHANNEL'] as string
-	);
+	const user = info.USER;
 
 	if (!user) throw new Error(`${process.env['TWITCH_CHANNEL']} user not found`);
 

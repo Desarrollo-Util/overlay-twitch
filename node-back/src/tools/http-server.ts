@@ -12,7 +12,7 @@ const initializeHttp = () => {
 
 	app.use(express.static(join(__dirname, '../../public')));
 
-	return httpServer;
+	return { app, httpServer };
 };
 
 export default initializeHttp;
