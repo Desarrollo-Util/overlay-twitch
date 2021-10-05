@@ -1,14 +1,12 @@
-import { ApiClient } from '@twurple/api/lib';
 import { Express } from 'express';
-import info from 'info';
+import global from 'global';
 
-const startEndpoints = async (app: Express, twitchApiClient: ApiClient) => {
-	let { USER, NUMBER_OF_SUBSCRIPTIONS } = info;
+const startEndpoints = async (app: Express) => {
+	let { USER, NUMBER_OF_SUBSCRIPTIONS, TWITCH_API_CLIENT } = global;
 
-	if (USER) {
-		const subscriptions = await twitchApiClient.subscriptions.getSubscriptions(
-			USER.id
-		);
+	if (USER && TWITCH_API_CLIENT) {
+		const subscriptions =
+			await TWITCH_API_CLIENT.subscriptions.getSubscriptions(USER.id);
 
 		NUMBER_OF_SUBSCRIPTIONS = subscriptions.total;
 

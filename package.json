@@ -7,7 +7,9 @@
 		"dev-back": "cd node-back && cpy \"src/resources/frases.json\" \"../dist/resources/\" && tsc-watch --onSuccess \"node -r ./tsconfig-paths-bootstrap.js ../dist/index.js\"",
 		"dev-front": "cd react-front && vite --host",
 		"build-front": "cd react-front && tsc && vite build",
-		"serve-front": "cd react-front && vite preview --port 3000"
+		"serve-front": "cd react-front && vite preview --port 3000",
+		"build": "tsc -p ./node-back/tsconfig.json && tscpaths -p ./node-back/tsconfig.json -s ./node-back/src -o ./dist",
+		"start": "node -r tsconfig-paths/register -r ts-node ./dist/index.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -18,12 +20,15 @@
 		"@twurple/chat": "^5.0.1",
 		"@twurple/eventsub": "^5.0.1",
 		"@twurple/eventsub-ngrok": "^5.0.1",
+		"cors": "^2.8.5",
 		"cpy-cli": "^3.1.1",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"got": "^11.8.2",
+		"inversify": "^5.1.1",
 		"react": "^17.0.0",
 		"react-dom": "^17.0.0",
+		"reflect-metadata": "^0.1.13",
 		"socket.io": "^4.1.3",
 		"socket.io-client": "^4.1.3",
 		"tsconfig-paths": "^3.10.1",
@@ -43,6 +48,7 @@
 		"tailwindcss": "^2.2.14",
 		"ts-node": "^10.2.1",
 		"tsc-watch": "^4.4.0",
+		"tscpaths": "^0.0.9",
 		"typescript": "^4.3.5",
 		"vite": "^2.4.4"
 	}

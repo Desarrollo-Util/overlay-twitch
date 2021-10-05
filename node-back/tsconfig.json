@@ -5,6 +5,11 @@
     "lib": [
       "ES2020"
     ],
+    "types": [
+      "reflect-metadata"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "allowJs": false,
     "checkJs": false,
     "declaration": true,
@@ -36,6 +41,9 @@
       ],
       "@Tools/*": [
         "tools/*"
+      ],
+      "@Interfaces/*":[
+        "interfaces/*"
       ]
     },
     "allowSyntheticDefaultImports": true,

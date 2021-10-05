@@ -1,9 +1,11 @@
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
 import { join } from 'path';
 
 const initializeHttp = () => {
 	const app = express();
+	app.use(cors());
 	const httpServer = http.createServer(app);
 
 	app.get('/', (_, res) => {

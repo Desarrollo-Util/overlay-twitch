@@ -11,13 +11,11 @@ import initializeChatBot from '@Tools/twitch-chat-client';
 import getTwitchEventClient from '@Tools/twitch-event-client';
 import initializeSocket from '@Tools/websocket-server';
 import dotenv from 'dotenv';
-import info from 'info';
+import global from 'global';
 
 dotenv.config();
 
 const startServer = async () => {
-	//#region Initialization
-
 	const CLIENT_ID = process.env['CLIENT_ID'] as string;
 	const CLIENT_SECRET = process.env['CLIENT_SECRET'] as string;
 	const CLIENT_CODE = process.env['CLIENT_CODE'] as string;
@@ -31,22 +29,19 @@ const startServer = async () => {
 		REDIRECT_URI
 	);
 
-	const twitchApiClient = await getTwitchApiClient(refreshableAuthProvider);
-	const twitchEventListener = await getTwitchEventClient(appAuthProvider);
-	const chatBot = await initializeChatBot(refreshableAuthProvider);
+	global.TWITCH_API_CLIENT = getTwitchApiClient(refreshableAuthProvider);
+	global.TWITCH_EVENT_LISTENER = await getTwitchEventClient(appAuthProvider);
+	global.TWITCH_CHATBOT = await initializeChatBot(refreshableAuthProvider);
+	global.USER = await global.TWITCH_API_CLIENT.users.getUserByName(
+		process.env['TWITCH_CHANNEL'] as string
+	);
 
 	const { app, httpServer } = initializeHttp();
 	const socketServer = initializeSocket(httpServer);
 
-	//#endregion
-
-	info.USER = await twitchApiClient.users.getUserByName(
-		process.env['TWITCH_CHANNEL'] as string
-	);
-
-	await startEndpoints(app, twitchApiClient);
-	await startWebSockets(twitchEventListener, socketServer);
-	startChat(chatBot, socketServer, twitchApiClient);
+	await startEndpoints(app);
+	await startWebSockets(socketServer);
+	startChat(socketServer);
 
 	httpServer.listen(process.env['PORT'], () => {
 		console.log(`Server is ready, listening on port *:${process.env['PORT']}`);

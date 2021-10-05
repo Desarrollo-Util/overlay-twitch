@@ -1,22 +1,30 @@
-import { ApiClient } from '@twurple/api';
-import { ChatClient, ChatRaidInfo, UserNotice } from '@twurple/chat';
+import { ChatRaidInfo, UserNotice } from '@twurple/chat';
+import global from 'global';
 
-const raidHandler = (chatBot: ChatClient, twitchApiClient: ApiClient) => {
+const raidHandler = () => {
 	return async (
 		channel: string,
 		userName: string,
 		raidInfo: ChatRaidInfo,
 		_info: UserNotice
 	) => {
-		const stream = await twitchApiClient.streams.getStreamByUserName(userName);
+		const { TWITCH_API_CLIENT, TWITCH_CHATBOT } = global;
+
+		if (!TWITCH_CHATBOT) throw new Error(`TwitchChatBot isn't initialized`);
+		if (!TWITCH_API_CLIENT)
+			throw new Error(`TwitchApiClient isn't initialized`);
+
+		const stream = await TWITCH_API_CLIENT.streams.getStreamByUserName(
+			userName
+		);
 
 		if (stream) {
-			chatBot.say(
+			TWITCH_CHATBOT.say(
 				channel,
 				`/me ${userName} estaba en directo ${stream.title} y se ha marcado un precioso raideo con ${raidInfo.viewerCount} personitas, pegadle un buen follow a su canal https://twitch.tv/${userName}`
 			);
 		} else {
-			chatBot.say(
+			TWITCH_CHATBOT.say(
 				channel,
 				`/me ${userName} se ha marcado un precioso raideo con ${raidInfo.viewerCount} personitas, pegadle un buen follow a su canal https://twitch.tv/${userName}`
 			);

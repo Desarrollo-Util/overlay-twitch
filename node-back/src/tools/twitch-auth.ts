@@ -6,7 +6,10 @@ import {
 import { readFile, writeFile } from 'fs/promises';
 import got from 'got';
 import { join } from 'path';
-import { TwitchAuthData, TwitchAuthResponseData } from 'types/twitch-auth.type';
+import {
+	TwitchAuthData,
+	TwitchAuthResponseData,
+} from '../types/twitch-auth.type';
 
 const TWITCH_SCOPES = [
 	'channel:read:subscriptions',

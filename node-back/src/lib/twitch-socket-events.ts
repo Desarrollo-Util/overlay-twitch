@@ -1,36 +1,34 @@
-import {
-	EventSubChannelRedemptionAddEvent,
-	EventSubListener,
-} from '@twurple/eventsub';
+import { EventSubChannelRedemptionAddEvent } from '@twurple/eventsub';
 import {} from 'fs/promises';
-import info from 'info';
+import global from 'global';
 import { Server as SocketServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 const startWebSockets = async (
-	twitchEventListener: EventSubListener,
 	socketServer: SocketServer<
 		DefaultEventsMap,
 		DefaultEventsMap,
 		DefaultEventsMap
 	>
 ) => {
-	const user = info.USER;
+	const { USER, TWITCH_EVENT_LISTENER } = global;
 
-	if (!user) throw new Error(`${process.env['TWITCH_CHANNEL']} user not found`);
+	if (!USER) throw new Error(`${process.env['TWITCH_CHANNEL']} user not found`);
+	if (!TWITCH_EVENT_LISTENER)
+		throw new Error(`TwitchEventListener isn't initialized`);
 
-	await twitchEventListener.subscribeToChannelFollowEvents(
-		user.id,
+	await TWITCH_EVENT_LISTENER.subscribeToChannelFollowEvents(
+		USER.id,
 		({ userName }) => {
 			socketServer.emit('follow', userName);
 		}
 	);
 
-	await twitchEventListener.subscribeToChannelSubscriptionMessageEvents(
-		user.id,
+	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionMessageEvents(
+		USER.id,
 		({ userDisplayName, messageText, cumulativeMonths }) => {
 			console.log(userDisplayName, messageText, cumulativeMonths);
-			socketServer.emit('subscription', {
+			socketServer.emit('subscription-message', {
 				userName: userDisplayName,
 				message: messageText,
 				months: cumulativeMonths,
@@ -38,8 +36,15 @@ const startWebSockets = async (
 		}
 	);
 
-	await twitchEventListener.subscribeToChannelRedemptionAddEventsForReward(
-		user.id,
+	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionEvents(
+		USER.id,
+		() => {
+			socketServer.emit('subscription');
+		}
+	);
+
+	await TWITCH_EVENT_LISTENER.subscribeToChannelRedemptionAddEventsForReward(
+		USER.id,
 		'78e45fd3-91e6-40be-bc5e-c9ec84152ffb',
 		({ input, userDisplayName }: EventSubChannelRedemptionAddEvent) => {
 			socketServer.emit('beer', {

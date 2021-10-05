@@ -1,6 +1,6 @@
 .alertbox {
-	@apply fixed bottom-24 left-2/4 right-2/4 w-30 flex flex-wrap;
-	margin-left: -30rem;
+	@apply fixed bottom-24 left-1/2 w-30 flex flex-wrap;
+	transform: translateX(-50%);
 }
 
 .message-alertbox {

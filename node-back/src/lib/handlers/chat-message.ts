@@ -2,15 +2,21 @@ import {
 	getCommonCommandHandlers,
 	getModCommandHandlers,
 } from '@Lib/handlers/command-handlers';
-import { ChatClient } from '@twurple/chat';
 import { TwitchPrivateMessage } from '@twurple/chat/lib/commands/TwitchPrivateMessage';
+import global from 'global';
 import { Server } from 'socket.io';
 
-const chatMessageHandler = (chatBot: ChatClient, socketServer: Server) => {
-	const channel = process.env['TWITCH_CHANNEL'] as string;
+const chatMessageHandler = (socketServer: Server) => {
+	const { TWITCH_CHATBOT, USER } = global;
 
-	const commonCommandHandlers = getCommonCommandHandlers(channel, chatBot);
-	const modCommandHandlers = getModCommandHandlers(channel, chatBot);
+	if (!USER) throw new Error(`${process.env['TWITCH_CHANNEL']} user not found`);
+	if (!TWITCH_CHATBOT) throw new Error(`TwitchChatBot isn't initialized`);
+
+	const commonCommandHandlers = getCommonCommandHandlers(
+		USER.name,
+		TWITCH_CHATBOT
+	);
+	const modCommandHandlers = getModCommandHandlers(USER.name, TWITCH_CHATBOT);
 
 	return async (
 		_channel: string,
@@ -18,8 +24,7 @@ const chatMessageHandler = (chatBot: ChatClient, socketServer: Server) => {
 		message: string,
 		info: TwitchPrivateMessage
 	) => {
-		const isMod =
-			info.userInfo.isMod || userName === process.env['TWITCH_CHANNEL'];
+		const isMod = info.userInfo.isMod || userName === USER.name;
 		const isCommandRegex = /^![a-zA-Z]+\s*/g;
 		const isCommand = message.match(isCommandRegex);
 

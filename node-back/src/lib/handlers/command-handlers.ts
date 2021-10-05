@@ -42,7 +42,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	culpa: async () => {
 		const { body } = await got.get(
 			`https://tmi.twitch.tv/group/user/${channel}/chatters`,
-			{ responseType: 'json', }
+			{ responseType: 'json' }
 		);
 		const { viewers } = (body as TwitchTmiBody).chatters;
 
@@ -53,7 +53,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 			}`
 		);
 	},
-	help: async function help(){
+	help: async function help() {
 		await chatBot.say(
 			channel,
 			'Comandos disponibles: !frase !git !theme !discord !youtube !music !culpa'
@@ -68,9 +68,9 @@ export const getModCommandHandlers: GetCommandHandlers = (
 	addfrase: addPhrase,
 	promo: async (message: string) => {
 		const messageSplitted = message.split(' ');
-		const channelToPromote = messageSplitted[1];
+		const channelToPromote = messageSplitted[0];
 
-		if (channelToPromote && messageSplitted.length === 2) {
+		if (channelToPromote && messageSplitted.length === 1) {
 			await chatBot.say(
 				channel,
 				`/me La promosió de este bellísimo canal, seguidle y dadle cariño -> https://twitch.tv/${channelToPromote}`

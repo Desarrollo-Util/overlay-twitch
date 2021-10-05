@@ -1,0 +1,91 @@
+.progBar {
+	position: relative;
+	width: 100%;
+	height: 22px;
+	border-radius: 20px;
+	background-color: #222;
+	box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.85);
+	border: 1px solid rgba(0, 0, 0, 0.8);
+	margin-top: 0.25rem;
+}
+
+.progBar__filling {
+	position: relative;
+	width: 0%;
+	height: 19px;
+	transition: width 2s ease-in-out;
+	background: linear-gradient(
+		90deg,
+		rgba(83, 83, 83, 1) 0%,
+		rgba(247, 223, 30, 1) 80%
+	);
+	border-radius: inherit;
+}
+
+.progBar__filling:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	background: linear-gradient(
+		90deg,
+		rgba(83, 83, 83, 1) 0%,
+		rgba(247, 223, 30, 1) 80%
+	);
+	filter: blur(5px);
+}
+
+.progBar__label {
+	width: 30px;
+	height: 28px;
+	position: absolute;
+	top: 25px;
+	right: -10px;
+	background: linear-gradient(
+		to bottom,
+		rgba(76, 76, 76, 1) 0%,
+		rgba(38, 38, 38, 1) 100%
+	);
+	border-radius: 6px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.3);
+}
+
+.progBar__label__arrow {
+	position: absolute;
+	display: block;
+	width: 12px;
+	height: 7px;
+	top: -7px;
+	left: 8px;
+	overflow: hidden;
+}
+
+.progBar__label__arrow:before {
+	content: '';
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	top: 4px;
+	left: 2px;
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	background: linear-gradient(
+		135deg,
+		rgba(86, 86, 86, 1) 0%,
+		rgba(76, 76, 76, 1) 50%
+	);
+	box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.15);
+	transform: rotate(45deg);
+}
+
+.progBar__label__text {
+	display: block;
+	font: bold 16px 'Montserrat', sans-serif;
+	color: #fff;
+	line-height: 26px;
+	text-align: center;
+	text-shadow: 0px -1px 0px #000000, 0px 1px 1px #000000;
+}
