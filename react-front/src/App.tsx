@@ -12,6 +12,8 @@ import BeerBox from './components/beer-box';
 import MemeBox from './components/meme-box';
 import SubscriptionsBar from './components/subscriptions-bar';
 import getBeerEventHandler from './lib/handlers/beer-handler';
+import getEndSubscriptionEventHandler from './lib/handlers/end-subscription-handler';
+import getFollowEventHandler from './lib/handlers/follow-handler';
 import getMemeEventHandler from './lib/handlers/meme-handler';
 import getSubscriptionEventHandler from './lib/handlers/subscription-handler';
 import queueReducer from './lib/states/queue-reducer';
@@ -22,23 +24,27 @@ const App: FC = () => {
 	const { queueBoxState, nextEvent, addNewEvent } = queueReducer();
 	const [currentSubs, setCurrentSubs] = useState<number>(0);
 
-	//const followEventHandler = getFollowEventHandler(addNewEvent);
+	const followEventHandler = getFollowEventHandler(addNewEvent);
 	const memeEventHandler = getMemeEventHandler(addNewEvent);
 	const beerEventHandler = getBeerEventHandler(addNewEvent);
 	const subscriptionEventHandler = getSubscriptionEventHandler(setCurrentSubs);
+	const endSubscriptionEventHandler =
+		getEndSubscriptionEventHandler(setCurrentSubs);
 
 	useEffect(() => {
 		if (!currentSubs) getCurrentSubs(setCurrentSubs);
-		socketClient.on('follow', subscriptionEventHandler);
+		socketClient.on('follow', followEventHandler);
 		socketClient.on('meme', memeEventHandler);
 		socketClient.on('beer', beerEventHandler);
 		socketClient.on('subscription', subscriptionEventHandler);
+		socketClient.on('end-subscription', endSubscriptionEventHandler);
 
 		return () => {
-			socketClient.off('follow', subscriptionEventHandler);
+			socketClient.off('follow', followEventHandler);
 			socketClient.off('meme', memeEventHandler);
 			socketClient.off('beer', beerEventHandler);
 			socketClient.off('subscription', subscriptionEventHandler);
+			socketClient.off('end-subscription', endSubscriptionEventHandler);
 		};
 	}, []);
 

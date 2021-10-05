@@ -1,4 +1,4 @@
-import { ChatClient } from '@twurple/chat/lib';
+import { ChatClient } from '@twurple/chat';
 
 export type GetCommandHandlers = (
 	channel: string,

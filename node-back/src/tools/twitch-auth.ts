@@ -90,7 +90,9 @@ const generateRefresableProvider = async (
 	TOKENS_FILE: string
 ): Promise<RefreshingAuthProvider> => {
 	const tokensFileBuffer = await readFile(TOKENS_FILE, 'utf8');
-	const twitchAccessToken: AccessToken = JSON.parse(tokensFileBuffer);
+	const twitchAccessToken: AccessToken = JSON.parse(
+		tokensFileBuffer.toString()
+	);
 
 	const refreshingAuthProvider = new RefreshingAuthProvider(
 		{

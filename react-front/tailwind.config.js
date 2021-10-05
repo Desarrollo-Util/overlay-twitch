@@ -32,7 +32,7 @@ const breakpoints = {
 };
 
 module.exports = {
-	purge: ['./src/**/*.ts'],
+	purge: ['./src/**/*.tsx'],
 	theme: {
 		screens: generateResponsiveScreens(
 			breakpoints.xs,

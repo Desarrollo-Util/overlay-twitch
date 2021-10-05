@@ -43,6 +43,13 @@ const startWebSockets = async (
 		}
 	);
 
+	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionEndEvents(
+		USER.id,
+		() => {
+			socketServer.emit('end-subscription');
+		}
+	);
+
 	await TWITCH_EVENT_LISTENER.subscribeToChannelRedemptionAddEventsForReward(
 		USER.id,
 		'78e45fd3-91e6-40be-bc5e-c9ec84152ffb',
