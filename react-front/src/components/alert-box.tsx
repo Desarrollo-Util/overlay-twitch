@@ -13,7 +13,9 @@ const AlertBox: FC<AlertBoxProps> = ({ actualEvent, onEnd }) => {
 		<div className='alertbox'>
 			<video
 				className='w-full'
-				src={`/video/follow/${VIDEOS[Math.floor(Math.random() * VIDEOS.length)]}?id=${actualEvent.id}`}
+				src={`/video/follow/${
+					VIDEOS[Math.floor(Math.random() * VIDEOS.length)]
+				}?id=${actualEvent.id}`}
 				controls={false}
 				autoPlay={true}
 				onPlay={event => (event.currentTarget.volume = 0.05)}
@@ -37,7 +39,8 @@ const getUsernameAnimated = (username: string) => {
 				className='username-message-alertbox'
 				style={{
 					animationDelay: `${i * 0.1}s`,
-				}}>
+				}}
+			>
 				{username[i]}
 			</span>
 		);

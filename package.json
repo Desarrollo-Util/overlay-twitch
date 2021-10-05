@@ -12,7 +12,8 @@
 		"start-front": "cd react-front && vite preview --port 3000",
 		"copy:phrases": "cd node-back && cpy \"./src/resources/frases.json\" \"../dist/resources/\"",
 		"clean:dist": "rimraf dist",
-		"clean:public": "rimraf public"
+		"clean:public": "rimraf public",
+		"format": "prettier --write ."
 	},
 	"keywords": [],
 	"author": "",

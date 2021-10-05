@@ -35,7 +35,8 @@ const getUsernameAnimated = (username: string) => {
 				className='username-message-alertbox'
 				style={{
 					animationDelay: `${i * 0.1}s`,
-				}}>
+				}}
+			>
 				{username[i]}
 			</span>
 		);
