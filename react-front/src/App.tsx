@@ -20,7 +20,13 @@ import queueReducer from './lib/states/queue-reducer';
 import { AlertTypes } from './types/alert-types.enum';
 
 const App: FC = () => {
-	const socketClient = useMemo(() => io('ws://localhost:3001'), []);
+	const socketClient = useMemo(
+		() =>
+			io('ws://localhost:3001', {
+				transports: ['websocket'],
+			}),
+		[]
+	);
 	const { queueBoxState, nextEvent, addNewEvent } = queueReducer();
 	const [currentSubs, setCurrentSubs] = useState<number>(0);
 
