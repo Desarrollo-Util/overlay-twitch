@@ -22,7 +22,7 @@ import { AlertTypes } from './types/alert-types.enum';
 const App: FC = () => {
 	const socketClient = useMemo(
 		() =>
-			io('ws://localhost:3001', {
+			io('ws://localhost:3100', {
 				transports: ['websocket'],
 			}),
 		[]
@@ -95,7 +95,7 @@ const getCurrentSubs = async (
 	setCurrentSubs: Dispatch<SetStateAction<number>>
 ) => {
 	try {
-		const response = await fetch('http://localhost:3001/subscriptions', {
+		const response = await fetch('http://localhost:3100/subscriptions', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',

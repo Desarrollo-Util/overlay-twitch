@@ -6,7 +6,7 @@ type AlertBoxProps = {
 	onEnd: () => void;
 };
 
-const VIDEOS = ['Soy programador.mp4', 'Soy yo Concha.mp4'];
+const VIDEOS = ['Soy programador.mp4', 'Soy yo Concha.mp4', 'botin.mp4'];
 
 const AlertBox: FC<AlertBoxProps> = ({ actualEvent, onEnd }) => {
 	return (
@@ -39,8 +39,7 @@ const getUsernameAnimated = (username: string) => {
 				className='username-message-alertbox'
 				style={{
 					animationDelay: `${i * 0.1}s`,
-				}}
-			>
+				}}>
 				{username[i]}
 			</span>
 		);

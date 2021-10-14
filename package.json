@@ -9,7 +9,7 @@
 		"build-back": "npm run clean:dist && npm run copy:phrases && cd node-back && tsc",
 		"build-front": "npm run clean:public && cd react-front && tsc && vite build",
 		"start-back": "cd node-back && node -r ./tsconfig-paths-bootstrap.js ../dist/index.js",
-		"start-front": "cd react-front && vite preview --port 3000",
+		"start-front": "cd react-front && vite preview --port 3101",
 		"copy:phrases": "cd node-back && cpy \"./src/resources/frases.json\" \"../dist/resources/\"",
 		"clean:dist": "rimraf dist",
 		"clean:public": "rimraf public",

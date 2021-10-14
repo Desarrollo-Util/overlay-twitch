@@ -27,7 +27,7 @@ const startWebSockets = async (
 	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionMessageEvents(
 		USER.id,
 		({ userDisplayName, messageText, cumulativeMonths }) => {
-			console.log(userDisplayName, messageText, cumulativeMonths);
+			console.log('CHANNEL_SUBSCRIPTION_MESSAGE_EVENT');
 			socketServer.emit('subscription-message', {
 				userName: userDisplayName,
 				message: messageText,
@@ -39,6 +39,7 @@ const startWebSockets = async (
 	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionEvents(
 		USER.id,
 		() => {
+			console.log('CHANNEL_SUBSCRIPTION_EVENT');
 			socketServer.emit('subscription');
 		}
 	);
@@ -46,6 +47,7 @@ const startWebSockets = async (
 	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionEndEvents(
 		USER.id,
 		() => {
+			console.log('CHANNEL_SUBSCRIPTION_END_EVENT');
 			socketServer.emit('end-subscription');
 		}
 	);
