@@ -4,7 +4,7 @@ import { Server as SocketServer } from 'socket.io';
 const initializeSocket = (httpServer: HttpServer) => {
 	const socketServer = new SocketServer(httpServer, {
 		cors: {
-			origin: 'http://localhost:3000',
+			origin: '*',
 			methods: ['GET', 'POST'],
 		},
 	});

@@ -1,7 +1,6 @@
 import { ApiClient } from '@twurple/api';
 import { ClientCredentialsAuthProvider } from '@twurple/auth/lib';
-import { EventSubListener } from '@twurple/eventsub';
-import { NgrokAdapter } from '@twurple/eventsub-ngrok';
+import { EnvPortAdapter, EventSubListener } from '@twurple/eventsub';
 
 const getTwitchEventClient = async (
 	appAuthProvider: ClientCredentialsAuthProvider
@@ -11,7 +10,9 @@ const getTwitchEventClient = async (
 
 	const twitchEventListener = new EventSubListener({
 		apiClient: twitchApiClient,
-		adapter: new NgrokAdapter(),
+		adapter: new EnvPortAdapter({
+			hostName: 'limitless-gorge-61077.herokuapp.com',
+		}),
 		secret: process.env['WEBHOOK_SECRET'] as string,
 	});
 
