@@ -1,7 +1,7 @@
 import { ApiClient } from '@twurple/api';
-import { ClientCredentialsAuthProvider } from '@twurple/auth/lib';
+import { ClientCredentialsAuthProvider } from '@twurple/auth';
 import { EventSubListener } from '@twurple/eventsub';
-import { NgrokAdapter } from '@twurple/eventsub-ngrok/lib';
+import { NgrokAdapter } from '@twurple/eventsub-ngrok';
 
 const getTwitchEventClient = async (
 	appAuthProvider: ClientCredentialsAuthProvider

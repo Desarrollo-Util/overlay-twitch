@@ -1,6 +1,6 @@
-import { ApiClient, HelixUser } from '@twurple/api/lib';
-import { ChatClient } from '@twurple/chat/lib';
-import { EventSubListener } from '@twurple/eventsub/lib';
+import { ApiClient, HelixUser } from '@twurple/api';
+import { ChatClient } from '@twurple/chat';
+import { EventSubListener } from '@twurple/eventsub';
 
 export type GlobalType = {
 	USER: HelixUser | null;

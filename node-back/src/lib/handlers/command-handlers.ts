@@ -1,5 +1,5 @@
 import { addPhrase, getRandomPhrase } from '@Lib/phrases';
-import { ChatClient } from '@twurple/chat/lib';
+import { ChatClient } from '@twurple/chat';
 import got from 'got';
 import { GetCommandHandlers } from 'types/command-handlers.type';
 import { TwitchTmiBody } from 'types/twitch-tmi-chatters';
