@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-const GOAL_SUBS = 70;
+const GOAL_SUBS = Number(import.meta.env.VITE_SUBSCRIPTIONS_GOAL);
 const BAR_CTN_WIDTH = 320;
 
 type SubscriptionsBarProps = {

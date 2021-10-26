@@ -53,10 +53,16 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 			}`
 		);
 	},
+	sorteo: async () => {
+		await chatBot.say(
+			channel,
+			`Para participar en el sorteo del curso de CSS tenéis que dejar un comentario en este vídeo que contenga la palabra "error o errores", https://www.youtube.com/watch?v=DVY4S32zhiY  Mucha suerte!!`
+		);
+	},
 	help: async function help() {
 		await chatBot.say(
 			channel,
-			'Comandos disponibles: !frase !git !theme !discord !youtube !music !culpa'
+			'Comandos disponibles: !frase !git !theme !discord !youtube !music !culpa !sorteo'
 		);
 	},
 });

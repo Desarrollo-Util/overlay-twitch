@@ -44,7 +44,9 @@ const startServer = async () => {
 	startChat(socketServer);
 
 	httpServer.listen(process.env['PORT'], () => {
-		console.log(`Server is ready, listening on port *:${process.env['PORT']}`);
+		console.log(
+			`Websockets and server is ready, listening on port *:${process.env['PORT']}`
+		);
 	});
 };
 

@@ -22,9 +22,14 @@ import { AlertTypes } from './types/alert-types.enum';
 const App: FC = () => {
 	const socketClient = useMemo(
 		() =>
-			io('ws://localhost:3100', {
-				transports: ['websocket'],
-			}),
+			io(
+				`ws://${import.meta.env.VITE_BACKEND_HOST}:${
+					import.meta.env.VITE_BACKEND_PORT
+				}`,
+				{
+					transports: ['websocket'],
+				}
+			),
 		[]
 	);
 	const { queueBoxState, nextEvent, addNewEvent } = queueReducer();
@@ -95,12 +100,17 @@ const getCurrentSubs = async (
 	setCurrentSubs: Dispatch<SetStateAction<number>>
 ) => {
 	try {
-		const response = await fetch('http://localhost:3100/subscriptions', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await fetch(
+			`http://${import.meta.env.VITE_BACKEND_HOST}:${
+				import.meta.env.VITE_BACKEND_PORT
+			}/subscriptions`,
+			{
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 		const body = await response.json();
 
 		setCurrentSubs(body);

@@ -20,6 +20,7 @@ const startWebSockets = async (
 	await TWITCH_EVENT_LISTENER.subscribeToChannelFollowEvents(
 		USER.id,
 		({ userName }) => {
+			console.log('FOLLOW', userName);
 			socketServer.emit('follow', userName);
 		}
 	);
