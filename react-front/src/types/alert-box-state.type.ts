@@ -1,4 +1,5 @@
 import { AlertTypes } from './alert-types.enum';
+import { RewardTypes } from './reward-types.enum';
 
 export type QueueBoxState<QueueBoxEvent> = {
 	currentEvent?: QueueBoxEvent;
@@ -22,6 +23,7 @@ export type BeerBoxEvent = {
 
 export type MemeBoxEvent = {
 	type: AlertTypes.MEME;
+	reward: RewardTypes;
 } & BoxEvent;
 
 export type QueueBoxEvent = AlertBoxEvent | BeerBoxEvent | MemeBoxEvent;

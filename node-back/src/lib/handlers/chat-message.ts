@@ -4,9 +4,8 @@ import {
 } from '@Lib/handlers/command-handlers';
 import { TwitchPrivateMessage } from '@twurple/chat/lib/commands/TwitchPrivateMessage';
 import global from 'global';
-import { Server } from 'socket.io';
 
-const chatMessageHandler = (socketServer: Server) => {
+const chatMessageHandler = () => {
 	const { TWITCH_CHATBOT, USER } = global;
 
 	if (!USER) throw new Error(`${process.env['TWITCH_CHANNEL']} user not found`);
@@ -40,11 +39,6 @@ const chatMessageHandler = (socketServer: Server) => {
 				if (modHandler)
 					await modHandler(messageText, info.userInfo.userId, userName);
 			}
-		} else if (message.includes('explorer')) {
-			setTimeout(
-				() => socketServer.emit('meme'),
-				Math.floor(Math.random() * 1000 * 10) + 5000
-			);
 		}
 	};
 };

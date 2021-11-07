@@ -45,15 +45,17 @@ const App: FC = () => {
 	useEffect(() => {
 		if (!currentSubs) getCurrentSubs(setCurrentSubs);
 		socketClient.on('follow', followEventHandler);
-		socketClient.on('meme', memeEventHandler);
 		socketClient.on('beer', beerEventHandler);
+		socketClient.on('explorer', memeEventHandler);
+		socketClient.on('shit', memeEventHandler);
 		socketClient.on('subscription', subscriptionEventHandler);
 		socketClient.on('end-subscription', endSubscriptionEventHandler);
 
 		return () => {
 			socketClient.off('follow', followEventHandler);
-			socketClient.off('meme', memeEventHandler);
 			socketClient.off('beer', beerEventHandler);
+			socketClient.off('explorer', memeEventHandler);
+			socketClient.off('shit', memeEventHandler);
 			socketClient.off('subscription', subscriptionEventHandler);
 			socketClient.off('end-subscription', endSubscriptionEventHandler);
 		};

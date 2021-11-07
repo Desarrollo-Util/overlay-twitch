@@ -11,10 +11,10 @@ const MemeBox: FC<MemeBoxProps> = ({ actualEvent, onEnd }) => {
 		<div className='memebox'>
 			<video
 				className='w-full'
-				src={`/video/memes/Random.mp4?id=${actualEvent.id}`}
+				src={`/video/memes/${actualEvent.reward}.mp4?id=${actualEvent.id}`}
 				controls={false}
 				autoPlay={true}
-				onPlay={event => (event.currentTarget.volume = 0.05)}
+				onPlay={event => (event.currentTarget.volume = 0.1)}
 				onEnded={onEnd}
 			/>
 		</div>

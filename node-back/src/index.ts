@@ -41,7 +41,7 @@ const startServer = async () => {
 
 	await startEndpoints(app);
 	await startWebSockets(socketServer);
-	startChat(socketServer);
+	startChat();
 
 	httpServer.listen(process.env['PORT'], () => {
 		console.log(

@@ -1,4 +1,4 @@
-import { addPhrase, getRandomPhrase } from '@Lib/phrases';
+import { addPhrase } from '@Lib/phrases';
 import { ChatClient } from '@twurple/chat';
 import got from 'got';
 import { GetCommandHandlers } from 'types/command-handlers.type';
@@ -8,10 +8,6 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	channel: string,
 	chatBot: ChatClient
 ) => ({
-	frase: async () => {
-		const phrase = await getRandomPhrase();
-		await chatBot.say(channel, `/me ${phrase}`);
-	},
 	git: async () => {
 		await chatBot.say(channel, '/me https://github.com/Desarrollo-Util');
 	},
@@ -62,7 +58,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	help: async function help() {
 		await chatBot.say(
 			channel,
-			'Comandos disponibles: !frase !git !theme !discord !youtube !music !culpa !sorteo'
+			'Comandos disponibles: !git !theme !discord !youtube !music !culpa !sorteo'
 		);
 	},
 });

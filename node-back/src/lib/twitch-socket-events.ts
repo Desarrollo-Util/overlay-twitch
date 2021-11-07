@@ -3,6 +3,7 @@ import {} from 'fs/promises';
 import global from 'global';
 import { Server as SocketServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import { getRewardsHandlers } from './handlers/rewards-handlers';
 
 const startWebSockets = async (
 	socketServer: SocketServer<
@@ -11,11 +12,17 @@ const startWebSockets = async (
 		DefaultEventsMap
 	>
 ) => {
-	const { USER, TWITCH_EVENT_LISTENER } = global;
+	const { USER, TWITCH_EVENT_LISTENER, TWITCH_CHATBOT } = global;
 
 	if (!USER) throw new Error(`${process.env['TWITCH_CHANNEL']} user not found`);
 	if (!TWITCH_EVENT_LISTENER)
 		throw new Error(`TwitchEventListener isn't initialized`);
+	if (!TWITCH_CHATBOT) throw new Error(`Twitch Chatbot isn't initialized`);
+
+	const customRewardsHandlers = getRewardsHandlers(
+		socketServer,
+		TWITCH_CHATBOT
+	);
 
 	await TWITCH_EVENT_LISTENER.subscribeToChannelFollowEvents(
 		USER.id,
@@ -53,14 +60,13 @@ const startWebSockets = async (
 		}
 	);
 
+	/** Custom rewards */
 	await TWITCH_EVENT_LISTENER.subscribeToChannelRedemptionAddEventsForReward(
 		USER.id,
-		'78e45fd3-91e6-40be-bc5e-c9ec84152ffb',
-		({ input, userDisplayName }: EventSubChannelRedemptionAddEvent) => {
-			socketServer.emit('beer', {
-				userName: userDisplayName,
-				message: input,
-			});
+		'',
+		(redemptionEvent: EventSubChannelRedemptionAddEvent) => {
+			const eventHandler = customRewardsHandlers[redemptionEvent.rewardId];
+			if (eventHandler) eventHandler(redemptionEvent);
 		}
 	);
 };
