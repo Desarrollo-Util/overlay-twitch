@@ -1,6 +1,6 @@
 {
 	"name": "twitch-alert-bot",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
@@ -22,11 +22,11 @@
 		"node": "14.x"
 	},
 	"dependencies": {
-		"@twurple/api": "^5.0.7",
-		"@twurple/auth": "^5.0.7",
-		"@twurple/chat": "^5.0.7",
-		"@twurple/eventsub": "^5.0.7",
-		"@twurple/eventsub-ngrok": "^5.0.7",
+		"@twurple/api": "^5.0.9",
+		"@twurple/auth": "^5.0.9",
+		"@twurple/chat": "^5.0.9",
+		"@twurple/eventsub": "^5.0.9",
+		"@twurple/eventsub-ngrok": "^5.0.9",
 		"cors": "^2.8.5",
 		"cpy-cli": "^3.1.1",
 		"dotenv": "^10.0.0",
@@ -37,29 +37,29 @@
 		"react": "^17.0.0",
 		"react-dom": "^17.0.0",
 		"reflect-metadata": "^0.1.13",
-		"socket.io": "^4.3.1",
+		"socket.io": "^4.3.2",
 		"socket.io-client": "^4.3.2",
 		"tsconfig-paths": "^3.11.0",
 		"uuid-random": "^1.3.2"
 	},
 	"devDependencies": {
-		"@learnthis/tailwind-utils": "^0.1.5",
+		"@learnthis/tailwind-utils": "^0.1.8",
 		"@types/express": "^4.17.13",
 		"@types/localtunnel": "^2.0.1",
-		"@types/node": "^16.11.6",
-		"@types/react": "^17.0.33",
-		"@types/react-dom": "^17.0.10",
+		"@types/node": "^16.11.7",
+		"@types/react": "^17.0.34",
+		"@types/react-dom": "^17.0.11",
 		"@vitejs/plugin-react-refresh": "^1.3.1",
 		"nodemon": "^2.0.14",
 		"postcss": "^8.3.11",
 		"postcss-import": "^14.0.2",
 		"postcss-preset-env": "^6.7.0",
 		"rimraf": "^3.0.2",
-		"tailwindcss": "^2.2.17",
+		"tailwindcss": "^2.2.19",
 		"ts-node": "^10.4.0",
 		"tsc-watch": "^4.5.0",
 		"tscpaths": "^0.0.9",
 		"typescript": "^4.4.4",
-		"vite": "^2.6.11"
+		"vite": "^2.6.13"
 	}
 }

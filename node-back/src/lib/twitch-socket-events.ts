@@ -24,6 +24,7 @@ const startWebSockets = async (
 		TWITCH_CHATBOT
 	);
 
+	/** Follow */
 	await TWITCH_EVENT_LISTENER.subscribeToChannelFollowEvents(
 		USER.id,
 		({ userName }) => {
@@ -32,6 +33,7 @@ const startWebSockets = async (
 		}
 	);
 
+	/** Subscription with message */
 	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionMessageEvents(
 		USER.id,
 		({ userDisplayName, messageText, cumulativeMonths }) => {
@@ -44,6 +46,7 @@ const startWebSockets = async (
 		}
 	);
 
+	/** Subscription start */
 	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionEvents(
 		USER.id,
 		() => {
@@ -52,6 +55,7 @@ const startWebSockets = async (
 		}
 	);
 
+	/** Subscription end */
 	await TWITCH_EVENT_LISTENER.subscribeToChannelSubscriptionEndEvents(
 		USER.id,
 		() => {
@@ -60,13 +64,13 @@ const startWebSockets = async (
 		}
 	);
 
-	/** Custom rewards */
-	await TWITCH_EVENT_LISTENER.subscribeToChannelRedemptionAddEventsForReward(
+	/** Custom rewards filtered */
+	await TWITCH_EVENT_LISTENER.subscribeToChannelRedemptionAddEvents(
 		USER.id,
-		'',
 		(redemptionEvent: EventSubChannelRedemptionAddEvent) => {
-			const eventHandler = customRewardsHandlers[redemptionEvent.rewardId];
-			if (eventHandler) eventHandler(redemptionEvent);
+			const customerRewardHandler =
+				customRewardsHandlers[redemptionEvent.rewardId];
+			if (customerRewardHandler) customerRewardHandler(redemptionEvent);
 		}
 	);
 };
