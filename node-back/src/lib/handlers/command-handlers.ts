@@ -1,5 +1,6 @@
 import { addPhrase } from '@Lib/phrases';
 import { ChatClient } from '@twurple/chat';
+import global from 'global';
 import got from 'got';
 import { GetCommandHandlers } from 'types/command-handlers.type';
 import { TwitchTmiBody } from 'types/twitch-tmi-chatters';
@@ -49,16 +50,31 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 			}`
 		);
 	},
-	sorteo: async () => {
-		await chatBot.say(
-			channel,
-			`Para participar en el sorteo del curso de CSS tenéis que dejar un comentario en este vídeo que contenga la palabra "error o errores", https://www.youtube.com/watch?v=DVY4S32zhiY  Mucha suerte!!`
-		);
+	followage: async (_, userId, userName) => {
+		const { TWITCH_API_CLIENT, USER } = global;
+		if (USER) {
+			const followage =
+				await TWITCH_API_CLIENT?.users.getFollowFromUserToBroadcaster(
+					userId,
+					USER.id
+				);
+
+			if (followage) {
+				const days =
+					(new Date().getTime() - followage.followDate.getTime()) /
+					(1000 * 3600 * 24);
+
+				await chatBot.say(
+					channel,
+					`${userName} nos sigue desde hace ${days.toFixed(0)} días`
+				);
+			}
+		}
 	},
 	help: async function help() {
 		await chatBot.say(
 			channel,
-			'Comandos disponibles: !git !theme !discord !youtube !music !culpa !sorteo'
+			'Comandos disponibles: !git !theme !discord !youtube !music !culpa'
 		);
 	},
 });
