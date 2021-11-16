@@ -74,7 +74,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	help: async function help() {
 		await chatBot.say(
 			channel,
-			'Comandos disponibles: !git !theme !discord !youtube !music !culpa'
+			'Comandos disponibles: !git !theme !discord !youtube !music !culpa !followage'
 		);
 	},
 });

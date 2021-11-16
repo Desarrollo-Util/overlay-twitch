@@ -37,7 +37,8 @@ module.exports = {
 		screens: generateResponsiveScreens(
 			breakpoints.xs,
 			breakpoints.sm,
-			breakpoints.md
+			breakpoints.md,
+			breakpoints.lg
 		),
 		borderWidth: generatePixelRules(0, 10),
 		fontSize: generatePixelRules(10, 60),
