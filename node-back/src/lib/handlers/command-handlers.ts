@@ -71,10 +71,16 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 			}
 		}
 	},
+	beta: async () => {
+		await chatBot.say(
+			channel,
+			'Puedes probar la beta de Learnthis aquí: https://learnthisdev.com'
+		);
+	},
 	help: async function help() {
 		await chatBot.say(
 			channel,
-			'Comandos disponibles: !git !theme !discord !youtube !music !culpa !followage'
+			'Comandos disponibles: !git !theme !discord !youtube !music !culpa !followage !beta'
 		);
 	},
 });
