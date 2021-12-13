@@ -1,6 +1,6 @@
 import { getRandomPhrase } from '@Lib/phrases';
-import { ChatClient } from '@twurple/chat/lib';
-import { EventSubChannelRedemptionAddEvent } from '@twurple/eventsub/lib';
+import { ChatClient } from '@twurple/chat';
+import { EventSubChannelRedemptionAddEvent } from '@twurple/eventsub';
 import { Server as SocketServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 

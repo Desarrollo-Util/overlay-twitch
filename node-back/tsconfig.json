@@ -33,7 +33,7 @@
 		"baseUrl": "./src",
 		"paths": {
 			"@Lib/*": ["lib/*"],
-			"@Tools/*": ["tools/*"],
+			"@Classes/*": ["classes/*"],
 			"@Interfaces/*": ["interfaces/*"]
 		},
 		"allowSyntheticDefaultImports": true,
