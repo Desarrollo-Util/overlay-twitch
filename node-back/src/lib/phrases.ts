@@ -1,14 +1,13 @@
-import { copyFile, readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
-const PHRASE_FILE_PATH = join(__dirname, '../resources/frases.json');
 const PHRASE_SRC_FILE_PATH = join(
 	__dirname,
 	'../../node-back/src/resources/frases.json'
 );
 
 const getRandomPhrase = async (): Promise<string> => {
-	const frasesString = await readFile(PHRASE_FILE_PATH, {
+	const frasesString = await readFile(PHRASE_SRC_FILE_PATH, {
 		encoding: 'utf-8',
 	});
 
@@ -17,15 +16,14 @@ const getRandomPhrase = async (): Promise<string> => {
 };
 
 const addPhrase = async (phrase: string): Promise<void> => {
-	const frasesString = await readFile(PHRASE_FILE_PATH, {
+	const frasesString = await readFile(PHRASE_SRC_FILE_PATH, {
 		encoding: 'utf-8',
 	});
 
 	const frases = JSON.parse(frasesString);
 	frases.frases.push(phrase);
 
-	await writeFile(PHRASE_FILE_PATH, JSON.stringify(frases));
-	await copyFile(PHRASE_FILE_PATH, PHRASE_SRC_FILE_PATH);
+	await writeFile(PHRASE_SRC_FILE_PATH, JSON.stringify(frases));
 };
 
 export { getRandomPhrase, addPhrase };

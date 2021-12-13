@@ -1,0 +1,8 @@
+{
+	"cronJobs": [
+		{
+			"message": "Comandos disponibles: !git !theme !discord !youtube !music !culpa !followage !beta",
+			"minutes": 1
+		}
+	]
+}

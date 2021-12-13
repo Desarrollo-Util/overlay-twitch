@@ -19,12 +19,12 @@ const raidHandler = () => {
 		);
 
 		if (stream) {
-			TWITCH_CHATBOT.say(
+			await TWITCH_CHATBOT.say(
 				channel,
 				`/me ${userName} estaba en directo ${stream.title} y se ha marcado un precioso raideo con ${raidInfo.viewerCount} personitas, pegadle un buen follow a su canal https://twitch.tv/${userName}`
 			);
 		} else {
-			TWITCH_CHATBOT.say(
+			await TWITCH_CHATBOT.say(
 				channel,
 				`/me ${userName} se ha marcado un precioso raideo con ${raidInfo.viewerCount} personitas, pegadle un buen follow a su canal https://twitch.tv/${userName}`
 			);

@@ -23,9 +23,10 @@ export const getRefreshableAuthProvider = async (
 	CLIENT_ID: string,
 	CLIENT_SECRET: string,
 	CLIENT_CODE: string,
-	REDIRECT_URI: string
+	REDIRECT_URI: string,
+	tokensFileName: string = 'tokens'
 ) => {
-	const TOKENS_FILE = join(__dirname, './tokens.json');
+	const TOKENS_FILE = join(__dirname, `./${tokensFileName}.json`);
 
 	try {
 		const refreshingAuthProvider = await generateRefresableProvider(
@@ -50,7 +51,9 @@ export const getRefreshableAuthProvider = async (
 				}, '');
 
 				console.log(
-					`Please enter in this website and get CLIENT_CODE, after this update in .env and restart:
+					`Please enter in this website and get ${
+						tokensFileName === 'tokens' ? 'CLIENT_CODE' : 'CHAT_BOT_CLIENT_CODE'
+					}, after this update in .env and restart:
       https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${scopeQuery}`
 				);
 

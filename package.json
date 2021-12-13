@@ -4,13 +4,12 @@
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
-		"dev-back": "npm run copy:phrases && cd node-back && tsc-watch --onSuccess \"node -r ./tsconfig-paths-bootstrap.js ../dist/index.js\"",
+		"dev-back": "cd node-back && tsc-watch --onSuccess \"node -r ./tsconfig-paths-bootstrap.js ../dist/index.js\"",
 		"dev-front": "cd react-front && vite --host",
-		"build-back": "npm run clean:dist && npm run copy:phrases && cd node-back && tsc",
+		"build-back": "npm run clean:dist && cd node-back && tsc",
 		"build-front": "npm run clean:public && cd react-front && tsc && vite build",
 		"start-back": "cd node-back && node -r ./tsconfig-paths-bootstrap.js ../dist/index.js",
 		"start-front": "cd react-front && vite preview --port 3100",
-		"copy:phrases": "cd node-back && cpy \"./src/resources/frases.json\" \"../dist/resources/\"",
 		"clean:dist": "rimraf dist",
 		"clean:public": "rimraf public",
 		"format": "prettier --write ."
@@ -39,6 +38,7 @@
 		"reflect-metadata": "^0.1.13",
 		"socket.io": "^4.3.2",
 		"socket.io-client": "^4.3.2",
+		"toad-scheduler": "^1.6.0",
 		"tsconfig-paths": "^3.11.0",
 		"uuid-random": "^1.3.2"
 	},

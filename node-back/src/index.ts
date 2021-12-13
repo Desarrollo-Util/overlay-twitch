@@ -1,3 +1,4 @@
+import startCronJobs from '@Lib/cron-jobs';
 import startEndpoints from '@Lib/endpoints';
 import startChat from '@Lib/twitch-chat-events';
 import startWebSockets from '@Lib/twitch-socket-events';
@@ -16,22 +17,53 @@ import global from 'global';
 dotenv.config();
 
 const startServer = async () => {
+	//#region Environment variables
+
 	const CLIENT_ID = process.env['CLIENT_ID'] as string;
 	const CLIENT_SECRET = process.env['CLIENT_SECRET'] as string;
 	const CLIENT_CODE = process.env['CLIENT_CODE'] as string;
 	const REDIRECT_URI = process.env['REDIRECT_URI'] as string;
+	const CHAT_BOT_CLIENT_ID = process.env['CHAT_BOT_CLIENT_ID'] as string;
+	const CHAT_BOT_CLIENT_SECRET = process.env[
+		'CHAT_BOT_CLIENT_SECRET'
+	] as string;
+	const CHAT_BOT_CLIENT_CODE = process.env['CHAT_BOT_CLIENT_CODE'] as string;
+	const CHAT_BOT_REDIRECT_URI = process.env['CHAT_BOT_REDIRECT_URI'] as string;
 
-	const appAuthProvider = await getAppAuthProvider(CLIENT_ID, CLIENT_SECRET);
-	const refreshableAuthProvider = await getRefreshableAuthProvider(
+	//#endregion
+
+	//#region Primary account
+
+	const primaryAuthProvider = await getAppAuthProvider(
+		CLIENT_ID,
+		CLIENT_SECRET
+	);
+	const primaryRefAuthProvider = await getRefreshableAuthProvider(
 		CLIENT_ID,
 		CLIENT_SECRET,
 		CLIENT_CODE,
 		REDIRECT_URI
 	);
 
-	global.TWITCH_API_CLIENT = getTwitchApiClient(refreshableAuthProvider);
-	global.TWITCH_EVENT_LISTENER = await getTwitchEventClient(appAuthProvider);
-	global.TWITCH_CHATBOT = await initializeChatBot(refreshableAuthProvider);
+	//#endregion
+
+	//#region Secondary account
+
+	const botRefAuthProvider = await getRefreshableAuthProvider(
+		CHAT_BOT_CLIENT_ID,
+		CHAT_BOT_CLIENT_SECRET,
+		CHAT_BOT_CLIENT_CODE,
+		CHAT_BOT_REDIRECT_URI,
+		'bot-tokens'
+	);
+
+	//#endregion
+
+	global.TWITCH_API_CLIENT = getTwitchApiClient(primaryRefAuthProvider);
+	global.TWITCH_EVENT_LISTENER = await getTwitchEventClient(
+		primaryAuthProvider
+	);
+	global.TWITCH_CHATBOT = await initializeChatBot(botRefAuthProvider);
 	global.USER = await global.TWITCH_API_CLIENT.users.getUserByName(
 		process.env['TWITCH_CHANNEL'] as string
 	);
@@ -42,6 +74,7 @@ const startServer = async () => {
 	await startEndpoints(app);
 	await startWebSockets(socketServer);
 	startChat();
+	await startCronJobs();
 
 	httpServer.listen(process.env['PORT'], () => {
 		console.log(

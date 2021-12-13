@@ -44,9 +44,8 @@ const getTwitchEventClient = async (
 
 const removeListenerOnShutdown = (twitchEventListener: EventSubListener) =>
 	process.on('SIGINT', async () => {
-		console.log('KILLING PROCESS');
+		console.log('Killing Twitch event listener...');
 		await twitchEventListener.unlisten();
-		process.exit(0);
 	});
 
 export default getTwitchEventClient;
