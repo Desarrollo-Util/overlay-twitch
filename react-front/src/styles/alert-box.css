@@ -4,7 +4,7 @@
 }
 
 .message-alertbox {
-	@apply mt-1_5 text-20 font-bold relative text-red-400;
+	@apply mt-1_5 text-20 font-bold relative text-error;
 	font-family: 'Montserrat', sans-serif;
 }
 

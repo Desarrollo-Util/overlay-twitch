@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { MemeBoxEvent } from '../types/alert-box-state.type';
 
 type MemeBoxProps = {

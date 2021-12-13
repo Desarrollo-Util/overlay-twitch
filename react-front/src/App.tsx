@@ -1,4 +1,4 @@
-import React, {
+import {
 	Dispatch,
 	FC,
 	SetStateAction,
@@ -6,6 +6,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import AlertBox from './components/alert-box';
 import BeerBox from './components/beer-box';
@@ -17,6 +18,7 @@ import getFollowEventHandler from './lib/handlers/follow-handler';
 import getMemeEventHandler from './lib/handlers/meme-handler';
 import getSubscriptionEventHandler from './lib/handlers/subscription-handler';
 import queueReducer from './lib/states/queue-reducer';
+import HeroPanel from './pages/hero-panel';
 import { AlertTypes } from './types/alert-types.enum';
 
 const App: FC = () => {
@@ -91,10 +93,16 @@ const App: FC = () => {
 	);
 
 	return (
-		<>
-			<SubscriptionsBar currentSubs={currentSubs} />
-			{renderAlerts}
-		</>
+		<BrowserRouter>
+			<Routes>
+				<Route
+					path='/'
+					element={<SubscriptionsBar currentSubs={currentSubs} />}
+				/>
+				<Route path='/alerts' element={renderAlerts} />
+				<Route path='/hero' element={<HeroPanel />} />
+			</Routes>
+		</BrowserRouter>
 	);
 };
 
