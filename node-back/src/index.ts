@@ -86,7 +86,9 @@ const startServer = async () => {
 
 	iocContainer.bind<IWebServer>(iocSymbols.WebServer).to(WebServer);
 
-	const webServer = iocContainer.resolve(WebServer);
+	const webServer = await iocContainer.getAsync<IWebServer>(
+		iocSymbols.WebServer
+	);
 
 	webServer.httpServer.listen(process.env['PORT'], () => {
 		console.log(

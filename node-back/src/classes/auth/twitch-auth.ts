@@ -6,7 +6,7 @@ import {
 } from '@twurple/auth';
 import { readFile, writeFile } from 'fs/promises';
 import got from 'got';
-import { inject, injectable, unmanaged } from 'inversify';
+import { inject, injectable, postConstruct, unmanaged } from 'inversify';
 import iocSymbols from 'ioc-symbols';
 import { join } from 'path';
 import { TwitchAuthData, TwitchAuthResponseData } from 'types/twitch-auth.type';
@@ -41,7 +41,6 @@ abstract class TwitchAuth implements ITwitchAuth {
 		@unmanaged() public tokensFilename: string
 	) {
 		this.initAppAuthProvider();
-		this.initRefreshableAuthProvider();
 	}
 
 	/** Application auth provider getter */
@@ -69,16 +68,15 @@ abstract class TwitchAuth implements ITwitchAuth {
 		}
 	}
 
+	@postConstruct()
 	/** Initialize refreshable auth provider */
-	private async initRefreshableAuthProvider() {
+	protected async initRefreshableAuthProvider() {
 		const tokensFile = join(__dirname, `./${this.tokensFilename}.json`);
 
 		try {
-			console.log('1', this._refreshableAuthProvider);
 			this._refreshableAuthProvider = await this.generateRefresableProvider(
 				tokensFile
 			);
-			console.log('2', this._refreshableAuthProvider);
 		} catch (error: any) {
 			const twitchAuthResponse = await got
 				.post(

@@ -1,7 +1,7 @@
 import ITwitchApiClient from '@Interfaces/twitch-api-client.interface';
 import ITwitchAuth from '@Interfaces/twitch-auth.interface';
 import { ApiClient, HelixUser } from '@twurple/api';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, postConstruct } from 'inversify';
 import iocSymbols from 'ioc-symbols';
 
 /** Twitch api client */
@@ -21,8 +21,6 @@ class TwitchApiClient implements ITwitchApiClient {
 		this._apiClient = new ApiClient({
 			authProvider: this.primaryTwitchAuth.refreshableAuthProvider,
 		});
-
-		this.initializeUser();
 	}
 
 	/** Api client getter */
@@ -35,8 +33,9 @@ class TwitchApiClient implements ITwitchApiClient {
 		return this._user;
 	}
 
+	@postConstruct()
 	/** User init */
-	private async initializeUser() {
+	protected async initializeUser() {
 		const user = await this._apiClient.users.getUserByName(this.twitchChannel);
 
 		if (!user) throw new Error(`${this.twitchChannel} user not found`);

@@ -17,8 +17,8 @@ class PrimaryTwitchAuth extends TwitchAuth {
 	 */
 	constructor(
 		@inject(iocSymbols.ClientId) clientId: string,
-		@inject(iocSymbols.ClientCode) clientSecret: string,
-		@inject(iocSymbols.ClientId) clientCode: string,
+		@inject(iocSymbols.ClientSecret) clientSecret: string,
+		@inject(iocSymbols.ClientCode) clientCode: string,
 		@inject(iocSymbols.RedirectUri) redirectUri: string
 	) {
 		super(

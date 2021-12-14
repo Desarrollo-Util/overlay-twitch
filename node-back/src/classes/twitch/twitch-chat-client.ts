@@ -5,7 +5,7 @@ import chatMessageHandler from '@Lib/handlers/chat-message';
 import raidHandler from '@Lib/handlers/raid';
 import { ChatClient } from '@twurple/chat';
 import { readFile } from 'fs/promises';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, postConstruct } from 'inversify';
 import iocSymbols from 'ioc-symbols';
 import { join } from 'path';
 import { AsyncTask, SimpleIntervalJob, ToadScheduler } from 'toad-scheduler';
@@ -18,7 +18,7 @@ class TwitchChatClient implements ITwitchChatClient {
 
 	private static _cronSrcFilePath = join(
 		__dirname,
-		'../../node-back/src/resources/cron.json'
+		'../../../node-back/src/resources/cron.json'
 	);
 
 	constructor(
@@ -32,15 +32,18 @@ class TwitchChatClient implements ITwitchChatClient {
 			authProvider: this._botTwitchAuth.refreshableAuthProvider,
 			channels: [this.twitchChannel],
 		});
-
-		this.connectChat();
-		this.startCronJobs();
-		this.startChatHandlers();
 	}
 
 	/** Chat client getter */
 	get chatClient(): ChatClient {
 		return this._chatClient;
+	}
+
+	@postConstruct()
+	protected async initializeChat() {
+		await this.connectChat();
+		await this.startCronJobs();
+		this.startChatHandlers();
 	}
 
 	private async connectChat() {

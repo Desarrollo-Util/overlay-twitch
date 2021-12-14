@@ -7,7 +7,7 @@ import { EventSubChannelRedemptionAddEvent } from '@twurple/eventsub';
 import cors from 'cors';
 import express, { Express } from 'express';
 import http, { Server as HttpServer } from 'http';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, postConstruct } from 'inversify';
 import iocSymbols from 'ioc-symbols';
 import { Server as SocketServer } from 'socket.io';
 
@@ -40,13 +40,16 @@ class WebServer implements IWebServer {
 		this._socketServer.on('connection', socket => {
 			console.log(`A user with socket id ${socket.id} has connected`);
 		});
-
-		this.initializeEndpoints();
-		this.initializeWebSockets();
 	}
 
 	get httpServer(): http.Server {
 		return this._httpServer;
+	}
+
+	@postConstruct()
+	protected async initializeWebServer() {
+		await this.initializeEndpoints();
+		await this.initializeWebSockets();
 	}
 
 	private async initializeEndpoints() {

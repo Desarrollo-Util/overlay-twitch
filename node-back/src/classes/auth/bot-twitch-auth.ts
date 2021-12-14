@@ -16,10 +16,10 @@ class BotTwitchAuth extends TwitchAuth {
 	 * @param redirectUri Redirect URI
 	 */
 	constructor(
-		@inject(iocSymbols.ClientId) clientId: string,
-		@inject(iocSymbols.ClientCode) clientSecret: string,
-		@inject(iocSymbols.ClientId) clientCode: string,
-		@inject(iocSymbols.RedirectUri) redirectUri: string
+		@inject(iocSymbols.ChatBotClientId) clientId: string,
+		@inject(iocSymbols.ChatBotClientSecret) clientSecret: string,
+		@inject(iocSymbols.ChatBotClientCode) clientCode: string,
+		@inject(iocSymbols.ChatBotRedirectUri) redirectUri: string
 	) {
 		super(
 			clientId,

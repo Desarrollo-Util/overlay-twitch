@@ -2,7 +2,7 @@ import ITwitchAuth from '@Interfaces/twitch-auth.interface';
 import ITwitchEventClient from '@Interfaces/twitch-event-client.interface';
 import { ApiClient } from '@twurple/api';
 import { EventSubListener, ReverseProxyAdapter } from '@twurple/eventsub';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, postConstruct } from 'inversify';
 import iocSymbols from 'ioc-symbols';
 import localtunnel from 'localtunnel';
 
@@ -16,15 +16,14 @@ class TwitchEventClient implements ITwitchEventClient {
 		@inject(iocSymbols.WebhookSecret) private _webhookSecret: string,
 		@inject(iocSymbols.PrimaryTwitchAuth)
 		private _primaryTwitchAuth: ITwitchAuth
-	) {
-		this.initializeEventListener();
-	}
+	) {}
 
 	get eventClient(): EventSubListener {
 		return this._eventClient;
 	}
 
-	private async initializeEventListener() {
+	@postConstruct()
+	protected async initializeEventListener() {
 		const twitchApiClient = new ApiClient({
 			authProvider: this._primaryTwitchAuth.appAuthProvider,
 		});
@@ -37,6 +36,7 @@ class TwitchEventClient implements ITwitchEventClient {
 			});
 		else if (this._portEventSub) {
 			const tunnel = await localtunnel({ port: this._portEventSub });
+
 			adapter = new ReverseProxyAdapter({
 				hostName: new URL(tunnel.url).hostname,
 				port: this._portEventSub,
