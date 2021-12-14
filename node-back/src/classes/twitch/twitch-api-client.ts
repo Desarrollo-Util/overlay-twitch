@@ -20,6 +20,7 @@ class TwitchApiClient implements ITwitchApiClient {
 	) {
 		this._apiClient = new ApiClient({
 			authProvider: this.primaryTwitchAuth.refreshableAuthProvider,
+			// logger: { minLevel: 'debug' },
 		});
 	}
 

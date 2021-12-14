@@ -47,6 +47,7 @@ class TwitchEventClient implements ITwitchEventClient {
 			apiClient: twitchApiClient,
 			adapter,
 			secret: this._webhookSecret,
+			// logger: { minLevel: 'debug' },
 		});
 
 		await twitchEventListener.listen();
@@ -63,6 +64,8 @@ class TwitchEventClient implements ITwitchEventClient {
 		process.on('SIGINT', async () => {
 			console.log('Killing Twitch event listener...');
 			await twitchEventListener.unlisten();
+
+			process.exit(0);
 		});
 	}
 }

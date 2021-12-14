@@ -71,7 +71,10 @@ abstract class TwitchAuth implements ITwitchAuth {
 	@postConstruct()
 	/** Initialize refreshable auth provider */
 	protected async initRefreshableAuthProvider() {
-		const tokensFile = join(__dirname, `./${this.tokensFilename}.json`);
+		const tokensFile = join(
+			__dirname,
+			`../../../node-back/${this.tokensFilename}.json`
+		);
 
 		try {
 			this._refreshableAuthProvider = await this.generateRefresableProvider(

@@ -1,13 +1,19 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
+import createSocket from '../lib/create-socket';
 
 const GOAL_SUBS = Number(import.meta.env.VITE_SUBSCRIPTIONS_GOAL);
 const BAR_CTN_WIDTH = 320;
 
-type SubscriptionsBarProps = {
-	currentSubs: number;
-};
-
-const SubscriptionsBar: FC<SubscriptionsBarProps> = ({ currentSubs }) => {
+const SubscriptionsBar: FC = () => {
+	const socketClient = createSocket();
+	const [currentSubs, setCurrentSubs] = useState<number>(0);
 	const [barWidth, setBarWidth] = useState(0);
 
 	const barRef = useRef<HTMLDivElement>(null);
@@ -34,6 +40,20 @@ const SubscriptionsBar: FC<SubscriptionsBarProps> = ({ currentSubs }) => {
 			}
 		}
 	}, [currentSubs, barWidth]);
+
+	const subHandler = getOnSubHandler(setCurrentSubs);
+	const endSubHandler = getOnEndSubHandler(setCurrentSubs);
+
+	useEffect(() => {
+		if (!currentSubs) getCurrentSubs(setCurrentSubs);
+
+		socketClient.on('subscription', subHandler);
+		socketClient.on('end-subscription', endSubHandler);
+		return () => {
+			socketClient.off('subscription', subHandler);
+			socketClient.off('end-subscription', endSubHandler);
+		};
+	}, []);
 
 	return (
 		<div
@@ -71,5 +91,36 @@ const setPercentageLabel = (
 	textLabel.textContent = `${labelSubs}`;
 	if (GOAL_SUBS === labelSubs) clearInterval(interval);
 };
+
+const getCurrentSubs = async (
+	setCurrentSubs: Dispatch<SetStateAction<number>>
+) => {
+	try {
+		const response = await fetch(
+			`http://${import.meta.env.VITE_BACKEND_HOST}:${
+				import.meta.env.VITE_BACKEND_PORT
+			}/subscriptions`,
+			{
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+		const body = await response.json();
+
+		setCurrentSubs(body);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const getOnSubHandler =
+	(setCurrentSubs: Dispatch<SetStateAction<number>>) => () =>
+		setCurrentSubs(currentSubs => currentSubs + 1);
+
+const getOnEndSubHandler =
+	(setCurrentSubs: Dispatch<SetStateAction<number>>) => () =>
+		setCurrentSubs(currentSubs => currentSubs - 1);
 
 export default SubscriptionsBar;
