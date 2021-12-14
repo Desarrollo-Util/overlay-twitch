@@ -73,7 +73,10 @@ class TwitchChatClient implements ITwitchChatClient {
 			);
 
 			scheduler.addSimpleIntervalJob(
-				new SimpleIntervalJob({ minutes: cronJob.minutes }, taskJob)
+				new SimpleIntervalJob(
+					{ minutes: cronJob.minutes + index * 0.5 },
+					taskJob
+				)
 			);
 		}
 

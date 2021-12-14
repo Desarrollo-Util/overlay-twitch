@@ -1,7 +1,11 @@
 {
 	"cronJobs": [
 		{
-			"message": "Comandos disponibles: !git !theme !discord !youtube !music !culpa !followage !beta",
+			"message": "Echa un vistazo a nuestro canal de Youtube => https://youtube.com/desarrolloutil",
+			"minutes": 5
+		},
+		{
+			"message": "Únete a Discord => https://discord.gg/TDcYzwNceK",
 			"minutes": 5
 		}
 	]

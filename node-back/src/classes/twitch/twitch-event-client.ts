@@ -47,7 +47,7 @@ class TwitchEventClient implements ITwitchEventClient {
 			apiClient: twitchApiClient,
 			adapter,
 			secret: this._webhookSecret,
-			// logger: { minLevel: 'debug' },
+			//logger: { minLevel: 'debug' },
 		});
 
 		await twitchEventListener.listen();

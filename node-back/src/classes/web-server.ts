@@ -6,14 +6,21 @@ import { getRewardsHandlers } from '@Lib/handlers/rewards-handlers';
 import { EventSubChannelRedemptionAddEvent } from '@twurple/eventsub';
 import cors from 'cors';
 import express, { Express } from 'express';
+import { readFile, writeFile } from 'fs/promises';
 import http, { Server as HttpServer } from 'http';
 import { inject, injectable, postConstruct } from 'inversify';
 import iocSymbols from 'ioc-symbols';
+import { join } from 'path';
 import { Server as SocketServer } from 'socket.io';
+import { LastInfo } from 'types/last-info.type';
 
 /** Web server */
 @injectable()
 class WebServer implements IWebServer {
+	private static lastInfoFilepath: string = join(
+		__dirname,
+		'../../node-back/src/resources/last-info.json'
+	);
 	private _app: Express;
 	private _httpServer: HttpServer;
 	private _socketServer: SocketServer;
@@ -50,39 +57,23 @@ class WebServer implements IWebServer {
 	protected async initializeWebServer() {
 		await this.initializeEndpoints();
 		await this.initializeWebSockets();
+		await this.initializeLastInfo();
 	}
 
 	private async initializeEndpoints() {
-		const { apiClient, user } = this._twitchApiClient;
+		const { numberOfSubscriptions, lastFollower, lastSubscriber } =
+			await this.getLastInfo();
 
 		this._app.get('/subscriptions', async (_, res) => {
-			const subscriptions = await apiClient.subscriptions.getSubscriptions(
-				user.id
-			);
-
-			res.json(subscriptions.total);
+			res.json(numberOfSubscriptions);
 		});
 
 		this._app.get('/last-subscriber', async (_, res) => {
-			const subscriptionEvents =
-				await apiClient.subscriptions.getSubscriptionEventsForBroadcaster(
-					user.id,
-					{ limit: 30 }
-				);
-
-			const lastSubscriber = subscriptionEvents.data.find(
-				({ eventType }) => eventType === 'subscriptions.subscribe'
-			);
-
-			res.json(lastSubscriber?.userDisplayName);
+			res.json(lastFollower);
 		});
 
 		this._app.get('/last-follower', async (_, res) => {
-			const lastFollower = await apiClient.users.getFollows({
-				followedUser: user.id,
-				limit: 1,
-			});
-			res.json(lastFollower?.data[0]?.userDisplayName);
+			res.json(lastSubscriber);
 		});
 	}
 
@@ -141,6 +132,57 @@ class WebServer implements IWebServer {
 				if (customerRewardHandler) customerRewardHandler(redemptionEvent);
 			}
 		);
+	}
+
+	private async initializeLastInfo() {
+		const lastInfo = await this.getLastInfo();
+
+		if (lastInfo.dateLastUpdate + 1000 * 60 * 15 < new Date().getTime())
+			await this.updateLastInfo();
+	}
+
+	private async updateLastInfo() {
+		const { apiClient, user } = this._twitchApiClient;
+
+		const { total: numberOfSubscriptions } =
+			await apiClient.subscriptions.getSubscriptions(user.id);
+
+		const subscriptionEvents =
+			await apiClient.subscriptions.getSubscriptionEventsForBroadcaster(
+				user.id,
+				{ limit: 30 }
+			);
+
+		const lastSubscriber = subscriptionEvents.data.find(
+			({ eventType }) => eventType === 'subscriptions.subscribe'
+		);
+
+		const lastFollower = await apiClient.users.getFollows({
+			followedUser: user.id,
+			limit: 1,
+		});
+
+		const lastInfo: LastInfo = {
+			numberOfSubscriptions,
+			lastSubscriber: lastSubscriber ? lastSubscriber.userDisplayName : '',
+			lastFollower: lastFollower.data[0]
+				? lastFollower.data[0].userDisplayName
+				: '',
+			lastCheer: '',
+			dateLastUpdate: new Date().getTime(),
+		};
+
+		await writeFile(WebServer.lastInfoFilepath, JSON.stringify(lastInfo));
+	}
+
+	private async getLastInfo() {
+		const lastInfoString = await readFile(WebServer.lastInfoFilepath, {
+			encoding: 'utf-8',
+		});
+
+		const lastInfo: LastInfo = JSON.parse(lastInfoString);
+
+		return lastInfo;
 	}
 }
 
