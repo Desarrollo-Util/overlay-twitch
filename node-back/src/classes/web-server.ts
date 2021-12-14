@@ -58,8 +58,31 @@ class WebServer implements IWebServer {
 			user.id
 		);
 
+		const subscriptionEvents =
+			await apiClient.subscriptions.getSubscriptionEventsForBroadcaster(
+				user.id,
+				{ limit: 30 }
+			);
+
+		const lastSubscriber = subscriptionEvents.data.find(
+			({ eventType }) => eventType === 'subscriptions.subscribe'
+		);
+
+		const lastFollower = await apiClient.users.getFollows({
+			followedUser: user.id,
+			limit: 1,
+		});
+
 		this._app.get('/subscriptions', (_, res) => {
 			res.json(subscriptions.total);
+		});
+
+		this._app.get('/last-subscriber', (_, res) => {
+			res.json(lastSubscriber?.userDisplayName);
+		});
+
+		this._app.get('/last-follower', (_, res) => {
+			res.json(lastFollower?.data[0]?.userDisplayName);
 		});
 	}
 

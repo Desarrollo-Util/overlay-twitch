@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { BeerBoxEvent } from '../types/alert-box-state.type';
 
 type BeerBoxProps = {
@@ -35,8 +35,7 @@ const getUsernameAnimated = (username: string) => {
 				className='username-message-alertbox'
 				style={{
 					animationDelay: `${i * 0.1}s`,
-				}}
-			>
+				}}>
 				{username[i]}
 			</span>
 		);
