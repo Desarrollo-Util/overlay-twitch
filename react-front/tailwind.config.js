@@ -129,7 +129,7 @@ const breakpoints = {
 };
 
 module.exports = {
-	purge: ['./src/**/*.tsx'],
+	content: ['./src/**/*.tsx'],
 	theme: {
 		colors,
 		screens: generateResponsiveScreens(
@@ -189,17 +189,7 @@ module.exports = {
 		right: {},
 		left: {},
 		bottom: {},
-		zIndex: generateIntRules(-100, 100),
-	},
-	variants: {
-		extend: {
-			borderOpacity: ['disabled'],
-			borderWidth: ['disabled'],
-			borderColor: ['responsive', 'focus', 'disabled'],
-			backgroundColor: ['responsive', 'hover', 'disabled'],
-			textColor: ['responsive', 'hover', 'disabled'],
-			cursor: ['disabled'],
-		},
+		zIndex: generateIntRules(0, 100),
 	},
 	plugins: [
 		flexPlugin(['responsive']),

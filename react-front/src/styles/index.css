@@ -1,6 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import './app-base.pcss';
+@import './app-components.pcss';
+@import './app-utilities.pcss';
 
 @import './main.css';
 @import './alert-box.css';

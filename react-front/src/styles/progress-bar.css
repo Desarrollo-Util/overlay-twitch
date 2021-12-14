@@ -3,7 +3,7 @@
 }
 
 .progBar__filling {
-	@apply relative w-0 h-1_75 transition-w-eio-2000 bg-primary blur-sm;
+	@apply relative w-0 h-1_75 transition-w-eio-2000 bg-primary;
 }
 
 .progBar__filling:before {
@@ -19,7 +19,7 @@
 }
 
 .progBar__label__arrow:before {
-	@apply absolute w-0_5 h-0_5 top-0_25 left-0_125 bg-bg-300 transform rotate-45;
+	@apply absolute w-0_5 h-0_5 top-0_25 left-0_125 bg-bg-300 rotate-45;
 	content: '';
 }
 
