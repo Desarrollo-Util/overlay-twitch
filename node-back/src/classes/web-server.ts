@@ -54,34 +54,34 @@ class WebServer implements IWebServer {
 
 	private async initializeEndpoints() {
 		const { apiClient, user } = this._twitchApiClient;
-		const subscriptions = await apiClient.subscriptions.getSubscriptions(
-			user.id
-		);
 
-		const subscriptionEvents =
-			await apiClient.subscriptions.getSubscriptionEventsForBroadcaster(
-				user.id,
-				{ limit: 30 }
+		this._app.get('/subscriptions', async (_, res) => {
+			const subscriptions = await apiClient.subscriptions.getSubscriptions(
+				user.id
 			);
 
-		const lastSubscriber = subscriptionEvents.data.find(
-			({ eventType }) => eventType === 'subscriptions.subscribe'
-		);
-
-		const lastFollower = await apiClient.users.getFollows({
-			followedUser: user.id,
-			limit: 1,
-		});
-
-		this._app.get('/subscriptions', (_, res) => {
 			res.json(subscriptions.total);
 		});
 
-		this._app.get('/last-subscriber', (_, res) => {
+		this._app.get('/last-subscriber', async (_, res) => {
+			const subscriptionEvents =
+				await apiClient.subscriptions.getSubscriptionEventsForBroadcaster(
+					user.id,
+					{ limit: 30 }
+				);
+
+			const lastSubscriber = subscriptionEvents.data.find(
+				({ eventType }) => eventType === 'subscriptions.subscribe'
+			);
+
 			res.json(lastSubscriber?.userDisplayName);
 		});
 
-		this._app.get('/last-follower', (_, res) => {
+		this._app.get('/last-follower', async (_, res) => {
+			const lastFollower = await apiClient.users.getFollows({
+				followedUser: user.id,
+				limit: 1,
+			});
 			res.json(lastFollower?.data[0]?.userDisplayName);
 		});
 	}
@@ -95,19 +95,19 @@ class WebServer implements IWebServer {
 		/** Follow */
 		await this._twitchEventClient.eventClient.subscribeToChannelFollowEvents(
 			this._twitchApiClient.user.id,
-			({ userName }) => {
+			({ userName, userDisplayName }) => {
 				console.log('FOLLOW', userName);
-				this._socketServer.emit('follow', userName);
+				this._socketServer.emit('follow', userName || userDisplayName);
 			}
 		);
 
 		/** Subscription with message */
 		await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionMessageEvents(
 			this._twitchApiClient.user.id,
-			({ userDisplayName, messageText, cumulativeMonths }) => {
+			({ userDisplayName, userName, messageText, cumulativeMonths }) => {
 				console.log('CHANNEL_SUBSCRIPTION_MESSAGE_EVENT');
 				this._socketServer.emit('subscription-message', {
-					userName: userDisplayName,
+					userName: userName || userDisplayName,
 					message: messageText,
 					months: cumulativeMonths,
 				});
@@ -117,9 +117,9 @@ class WebServer implements IWebServer {
 		/** Subscription start */
 		await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionEvents(
 			this._twitchApiClient.user.id,
-			() => {
+			({ userDisplayName, userName }) => {
 				console.log('CHANNEL_SUBSCRIPTION_EVENT');
-				this._socketServer.emit('subscription');
+				this._socketServer.emit('subscription', userName || userDisplayName);
 			}
 		);
 

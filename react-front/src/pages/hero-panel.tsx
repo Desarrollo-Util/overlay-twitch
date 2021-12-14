@@ -3,13 +3,26 @@ import HeroItem from '../components/hero-item';
 import BitsIcon from '../icons/bits-icon';
 import FollowIcon from '../icons/follow-icon';
 import SubscriptionIcon from '../icons/subscription-icon';
+import createSocket from '../lib/create-socket';
 import { HeroInfoState, HeroTypes } from '../types/hero-info-state.type';
 
 const HeroPanel: FC = () => {
+	const socketClient = createSocket();
 	const [heroState, setHeroState] = useState<HeroInfoState>();
+
+	const followHandler = getOnFollowHandler(setHeroState);
+	const subHandler = getOnSubHandler(setHeroState);
 
 	useEffect(() => {
 		getHeroInfo(setHeroState);
+
+		socketClient.on('follow', followHandler);
+		socketClient.on('subscription', subHandler);
+
+		return () => {
+			socketClient.off('follow', followHandler);
+			socketClient.off('subscription', subHandler);
+		};
 	}, []);
 
 	return (
@@ -71,5 +84,18 @@ const getHeroInfo = async (
 		[HeroTypes.SUBSCRIPTION]: lastSubscriber,
 	});
 };
+
+const getOnFollowHandler =
+	(setHeroState: Dispatch<SetStateAction<HeroInfoState | undefined>>) =>
+	(username: string) =>
+		setHeroState(heroState => ({ ...heroState, [HeroTypes.FOLLOW]: username }));
+
+const getOnSubHandler =
+	(setHeroState: Dispatch<SetStateAction<HeroInfoState | undefined>>) =>
+	(username: string) =>
+		setHeroState(heroState => ({
+			...heroState,
+			[HeroTypes.SUBSCRIPTION]: username,
+		}));
 
 export default HeroPanel;

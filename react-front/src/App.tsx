@@ -7,11 +7,11 @@ import {
 	useState,
 } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { io } from 'socket.io-client';
 import AlertBox from './components/alert-box';
 import BeerBox from './components/beer-box';
 import MemeBox from './components/meme-box';
 import SubscriptionsBar from './components/subscriptions-bar';
+import createSocket from './lib/create-socket';
 import getBeerEventHandler from './lib/handlers/beer-handler';
 import getEndSubscriptionEventHandler from './lib/handlers/end-subscription-handler';
 import getFollowEventHandler from './lib/handlers/follow-handler';
@@ -22,18 +22,7 @@ import HeroPanel from './pages/hero-panel';
 import { AlertTypes } from './types/alert-types.enum';
 
 const App: FC = () => {
-	const socketClient = useMemo(
-		() =>
-			io(
-				`ws://${import.meta.env.VITE_BACKEND_HOST}:${
-					import.meta.env.VITE_BACKEND_PORT
-				}`,
-				{
-					transports: ['websocket'],
-				}
-			),
-		[]
-	);
+	const socketClient = createSocket();
 	const { queueBoxState, nextEvent, addNewEvent } = queueReducer();
 	const [currentSubs, setCurrentSubs] = useState<number>(0);
 
