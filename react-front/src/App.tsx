@@ -96,7 +96,7 @@ const App: FC = () => {
 		<BrowserRouter>
 			<Routes>
 				<Route
-					path='/'
+					path='/subscription-bar'
 					element={<SubscriptionsBar currentSubs={currentSubs} />}
 				/>
 				<Route path='/alerts' element={renderAlerts} />

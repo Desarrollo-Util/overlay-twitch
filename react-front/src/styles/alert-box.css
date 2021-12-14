@@ -5,7 +5,7 @@
 
 .message-alertbox {
 	@apply mt-1_5 text-20 font-bold relative text-error;
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'Poppins', sans-serif;
 }
 
 .username-message-alertbox {
