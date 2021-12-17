@@ -91,9 +91,10 @@ const startServer = async () => {
 	);
 
 	webServer.httpServer.listen(process.env['PORT'], () => {
-		console.log(
+		webServer.logger.info(
 			`Websockets and server is ready, listening on port *:${process.env['PORT']}`
 		);
+		webServer.logger.info('Server is ready');
 	});
 
 	//#endregion

@@ -15,6 +15,7 @@ import { CronJob } from 'types/cron-jobs.type';
 @injectable()
 class TwitchChatClient implements ITwitchChatClient {
 	private _chatClient: ChatClient;
+	private _cronScheduler: ToadScheduler;
 
 	private static _cronSrcFilePath = join(
 		__dirname,
@@ -31,12 +32,19 @@ class TwitchChatClient implements ITwitchChatClient {
 		this._chatClient = new ChatClient({
 			authProvider: this._botTwitchAuth.refreshableAuthProvider,
 			channels: [this.twitchChannel],
+			//logger: { minLevel: 'debug' },
 		});
+
+		this._cronScheduler = new ToadScheduler();
 	}
 
 	/** Chat client getter */
 	get chatClient(): ChatClient {
 		return this._chatClient;
+	}
+
+	get cronScheduler(): ToadScheduler {
+		return this._cronScheduler;
 	}
 
 	@postConstruct()
@@ -59,8 +67,6 @@ class TwitchChatClient implements ITwitchChatClient {
 
 		cronJobs = JSON.parse(cronJobsString).cronJobs;
 
-		const scheduler = new ToadScheduler();
-
 		for (const [index, cronJob] of cronJobs.entries()) {
 			const taskJob = new AsyncTask(
 				index.toString(),
@@ -72,18 +78,13 @@ class TwitchChatClient implements ITwitchChatClient {
 				(err: Error) => console.error(`Error at cron messages: ${err}`)
 			);
 
-			scheduler.addSimpleIntervalJob(
+			this._cronScheduler.addSimpleIntervalJob(
 				new SimpleIntervalJob(
 					{ minutes: cronJob.minutes + index * 0.5 },
 					taskJob
 				)
 			);
 		}
-
-		process.on('SIGINT', () => {
-			console.log('Killing cron scheduler...');
-			scheduler.stop();
-		});
 	}
 
 	private startChatHandlers() {

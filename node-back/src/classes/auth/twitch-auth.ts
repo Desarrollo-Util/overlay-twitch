@@ -1,3 +1,4 @@
+import { createLogger, Logger } from '@d-fischer/logger';
 import ITwitchAuth from '@Interfaces/twitch-auth.interface';
 import {
 	AccessToken,
@@ -20,10 +21,12 @@ abstract class TwitchAuth implements ITwitchAuth {
 		'chat:read',
 		'chat:edit',
 		'whispers:edit',
+		'bits:read',
 	];
 
 	private _appAuthProvider!: ClientCredentialsAuthProvider;
 	private _refreshableAuthProvider!: RefreshingAuthProvider;
+	private readonly _logger: Logger;
 
 	/**
 	 * Constructor
@@ -40,6 +43,12 @@ abstract class TwitchAuth implements ITwitchAuth {
 		@inject(iocSymbols.RedirectUri) private _redirectUri: string,
 		@unmanaged() public tokensFilename: string
 	) {
+		this._logger = createLogger({
+			name: 'Twitch-Auth',
+			emoji: true,
+			minLevel: 'info',
+		});
+
 		this.initAppAuthProvider();
 	}
 
@@ -61,7 +70,7 @@ abstract class TwitchAuth implements ITwitchAuth {
 				this._clientSecret
 			);
 		} catch (error) {
-			console.error(
+			this._logger.error(
 				'Could not get app twitch auth provider, please check your credentials'
 			);
 			throw error;
@@ -94,7 +103,7 @@ abstract class TwitchAuth implements ITwitchAuth {
 						else return `${prev}%20${curr}`;
 					}, '');
 
-					console.log(
+					this._logger.warn(
 						`Please enter in this website and get ${
 							this.tokensFilename === 'tokens'
 								? 'CLIENT_CODE'
@@ -107,7 +116,7 @@ abstract class TwitchAuth implements ITwitchAuth {
 						}&response_type=code&scope=${scopeQuery}`
 					);
 
-					process.exit(1);
+					process.exit(-1);
 				});
 
 			let twitchAuthResponseJSON =

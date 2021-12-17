@@ -1,9 +1,13 @@
+import { createLogger, Logger } from '@d-fischer/logger';
 import ITwitchApiClient from '@Interfaces/twitch-api-client.interface';
 import ITwitchChatClient from '@Interfaces/twitch-chat-client.interface';
 import ITwitchEventClient from '@Interfaces/twitch-event-client.interface';
 import IWebServer from '@Interfaces/web-server.interface';
 import { getRewardsHandlers } from '@Lib/handlers/rewards-handlers';
-import { EventSubChannelRedemptionAddEvent } from '@twurple/eventsub';
+import {
+	EventSubChannelCheerEvent,
+	EventSubChannelRedemptionAddEvent,
+} from '@twurple/eventsub';
 import cors from 'cors';
 import express, { Express } from 'express';
 import { readFile, writeFile } from 'fs/promises';
@@ -24,6 +28,8 @@ class WebServer implements IWebServer {
 	private _app: Express;
 	private _httpServer: HttpServer;
 	private _socketServer: SocketServer;
+	private readonly _logger: Logger;
+	private _lastInfo!: LastInfo;
 
 	constructor(
 		@inject(iocSymbols.TwitchApiClient)
@@ -33,6 +39,12 @@ class WebServer implements IWebServer {
 		@inject(iocSymbols.TwitchEventClient)
 		private _twitchEventClient: ITwitchEventClient
 	) {
+		this._logger = createLogger({
+			name: 'Web-Server',
+			emoji: true,
+			minLevel: 'info',
+		});
+
 		this._app = express();
 		this._app.use(cors());
 		this._httpServer = http.createServer(this._app);
@@ -45,7 +57,7 @@ class WebServer implements IWebServer {
 		});
 
 		this._socketServer.on('connection', socket => {
-			console.log(`A user with socket id ${socket.id} has connected`);
+			this._logger.info(`A user with socket id ${socket.id} has connected`);
 		});
 	}
 
@@ -53,27 +65,33 @@ class WebServer implements IWebServer {
 		return this._httpServer;
 	}
 
+	get logger(): Logger {
+		return this._logger;
+	}
+
 	@postConstruct()
 	protected async initializeWebServer() {
-		await this.initializeEndpoints();
+		await this.updateLastInfoFromAPI();
 		await this.initializeWebSockets();
-		await this.initializeLastInfo();
+		await this.initializeEndpoints();
+		this.gracefulShutdown();
 	}
 
 	private async initializeEndpoints() {
-		const { numberOfSubscriptions, lastFollower, lastSubscriber } =
-			await this.getLastInfo();
-
 		this._app.get('/subscriptions', async (_, res) => {
-			res.json(numberOfSubscriptions);
+			res.json(this._lastInfo.numberOfSubscriptions);
 		});
 
 		this._app.get('/last-subscriber', async (_, res) => {
-			res.json(lastFollower);
+			res.json(this._lastInfo.lastSubscriber);
 		});
 
 		this._app.get('/last-follower', async (_, res) => {
-			res.json(lastSubscriber);
+			res.json(this._lastInfo.lastFollower);
+		});
+
+		this._app.get('/last-cheer', async (_, res) => {
+			res.json(this._lastInfo.lastCheer);
 		});
 	}
 
@@ -83,74 +101,110 @@ class WebServer implements IWebServer {
 			this._twitchChatClient.chatClient
 		);
 
-		/** Follow */
-		await this._twitchEventClient.eventClient.subscribeToChannelFollowEvents(
-			this._twitchApiClient.user.id,
-			({ userName, userDisplayName }) => {
-				console.log('FOLLOW', userName);
-				this._socketServer.emit('follow', userName || userDisplayName);
-			}
-		);
+		try {
+			await this._twitchEventClient.eventClient.subscribeToChannelFollowEvents(
+				this._twitchApiClient.user.id,
+				({ userDisplayName, userName }) => {
+					const name = userName || userDisplayName;
 
-		/** Subscription with message */
-		await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionMessageEvents(
-			this._twitchApiClient.user.id,
-			({ userDisplayName, userName, messageText, cumulativeMonths }) => {
-				console.log('CHANNEL_SUBSCRIPTION_MESSAGE_EVENT');
-				this._socketServer.emit('subscription-message', {
-					userName: userName || userDisplayName,
-					message: messageText,
-					months: cumulativeMonths,
-				});
-			}
-		);
+					this._lastInfo.numberOfSubscriptions += 1;
+					this._lastInfo.lastFollower = name;
+					this._twitchEventClient.logger.info(`Follow -> ${name}`);
+					this._socketServer.emit('follow', name);
+				}
+			);
 
-		/** Subscription start */
-		await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionEvents(
-			this._twitchApiClient.user.id,
-			({ userDisplayName, userName }) => {
-				console.log('CHANNEL_SUBSCRIPTION_EVENT');
-				this._socketServer.emit('subscription', userName || userDisplayName);
-			}
-		);
+			await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionMessageEvents(
+				this._twitchApiClient.user.id,
+				({ userDisplayName, userName, messageText, cumulativeMonths }) => {
+					const name = userName || userDisplayName;
 
-		/** Subscription end */
-		await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionEndEvents(
-			this._twitchApiClient.user.id,
-			() => {
-				console.log('CHANNEL_SUBSCRIPTION_END_EVENT');
-				this._socketServer.emit('end-subscription');
-			}
-		);
+					this._twitchEventClient.logger.info(
+						`Subscription message event -> ${name}; Cumulative months -> ${cumulativeMonths}`
+					);
+					this._socketServer.emit('subscription-message', {
+						userName: name,
+						message: messageText,
+						months: cumulativeMonths,
+					});
+				}
+			);
 
-		/** Custom rewards filtered */
-		await this._twitchEventClient.eventClient.subscribeToChannelRedemptionAddEvents(
-			this._twitchApiClient.user.id,
-			(redemptionEvent: EventSubChannelRedemptionAddEvent) => {
-				const customerRewardHandler =
-					customRewardsHandlers[redemptionEvent.rewardId];
-				if (customerRewardHandler) customerRewardHandler(redemptionEvent);
+			await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionEvents(
+				this._twitchApiClient.user.id,
+				({ userDisplayName, userName, isGift }) => {
+					const name = userName || userDisplayName;
+
+					this._twitchEventClient.logger.info(
+						`Subscription event -> ${name}; Is gift -> ${isGift}`
+					);
+					this._socketServer.emit('subscription', name);
+				}
+			);
+
+			await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionEndEvents(
+				this._twitchApiClient.user.id,
+				({ userDisplayName, userName, isGift }) => {
+					const name = userName || userDisplayName;
+
+					this._twitchEventClient.logger.info(
+						`Subscription end event -> ${name}; Is gift -> ${isGift}`
+					);
+					this._socketServer.emit('end-subscription');
+				}
+			);
+
+			await this._twitchEventClient.eventClient.subscribeToChannelRedemptionAddEvents(
+				this._twitchApiClient.user.id,
+				(redemptionEvent: EventSubChannelRedemptionAddEvent) => {
+					this._twitchEventClient.logger.info(
+						`Reward Redemption Points -> ${redemptionEvent.rewardTitle}`
+					);
+					const customerRewardHandler =
+						customRewardsHandlers[redemptionEvent.rewardId];
+					if (customerRewardHandler) customerRewardHandler(redemptionEvent);
+				}
+			);
+
+			await this._twitchEventClient.eventClient.subscribeToChannelCheerEvents(
+				this._twitchApiClient.user.id,
+				({
+					userDisplayName,
+					userName,
+					bits,
+					message,
+				}: EventSubChannelCheerEvent) => {
+					const name = userName || userDisplayName || '';
+
+					this._lastInfo.lastCheer = name;
+					this._twitchEventClient.logger.info(
+						`Cheer event -> ${name}; Bits -> ${bits}`
+					);
+					this._socketServer.emit('cheer', {
+						userName: name,
+						message,
+						bits,
+					});
+				}
+			);
+		} catch (error: any) {
+			if (error._statusCode === 403) {
+				this._logger.error(
+					'Se ha producido un error de autenticación, por favor revisa los scopes, clientID y clientSecret'
+				);
+				process.exit(-1);
 			}
-		);
+		}
 	}
 
-	private async initializeLastInfo() {
-		const lastInfo = await this.getLastInfo();
-
-		if (lastInfo.dateLastUpdate + 1000 * 60 * 15 < new Date().getTime())
-			await this.updateLastInfo();
-	}
-
-	private async updateLastInfo() {
+	private async updateLastInfoFromAPI() {
 		const { apiClient, user } = this._twitchApiClient;
-
 		const { total: numberOfSubscriptions } =
 			await apiClient.subscriptions.getSubscriptions(user.id);
 
 		const subscriptionEvents =
 			await apiClient.subscriptions.getSubscriptionEventsForBroadcaster(
-				user.id,
-				{ limit: 30 }
+				user.id
 			);
 
 		const lastSubscriber = subscriptionEvents.data.find(
@@ -162,20 +216,39 @@ class WebServer implements IWebServer {
 			limit: 1,
 		});
 
-		const lastInfo: LastInfo = {
+		const oldLastInfo = await this.readLastInfo();
+		this._lastInfo = {
 			numberOfSubscriptions,
 			lastSubscriber: lastSubscriber ? lastSubscriber.userDisplayName : '',
 			lastFollower: lastFollower.data[0]
 				? lastFollower.data[0].userDisplayName
 				: '',
-			lastCheer: '',
+			lastCheer: oldLastInfo.lastCheer || '',
 			dateLastUpdate: new Date().getTime(),
 		};
 
-		await writeFile(WebServer.lastInfoFilepath, JSON.stringify(lastInfo));
+		await writeFile(WebServer.lastInfoFilepath, JSON.stringify(this._lastInfo));
 	}
 
-	private async getLastInfo() {
+	private async updateLastInfo() {
+		const { numberOfSubscriptions, lastSubscriber, lastFollower, lastCheer } =
+			this._lastInfo;
+
+		const updatedLastInfo: LastInfo = {
+			numberOfSubscriptions,
+			lastSubscriber,
+			lastFollower,
+			lastCheer,
+			dateLastUpdate: new Date().getTime(),
+		};
+
+		await writeFile(
+			WebServer.lastInfoFilepath,
+			JSON.stringify(updatedLastInfo)
+		);
+	}
+
+	private async readLastInfo() {
 		const lastInfoString = await readFile(WebServer.lastInfoFilepath, {
 			encoding: 'utf-8',
 		});
@@ -183,6 +256,19 @@ class WebServer implements IWebServer {
 		const lastInfo: LastInfo = JSON.parse(lastInfoString);
 
 		return lastInfo;
+	}
+
+	private gracefulShutdown() {
+		process.on('SIGINT', async () => {
+			this._logger.info('Stopping all listeners and servers...');
+
+			this._twitchChatClient.cronScheduler.stop();
+			await this._twitchChatClient.chatClient.quit();
+			await this.updateLastInfo();
+
+			this._logger.info('Stopped all listeners and servers, process finished');
+			process.exit(0);
+		});
 	}
 }
 
