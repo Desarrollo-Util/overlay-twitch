@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { FollowEvent } from '../types/alert-box-state.type';
+import { FollowEvent } from '../types/alert-event.type';
 
 type AlertBoxProps = {
 	actualEvent: FollowEvent;
@@ -22,7 +22,7 @@ const AlertBox: FC<AlertBoxProps> = ({ actualEvent, onEnd }) => {
 				onEnded={onEnd}
 			/>
 			<span className='message-alertbox'>
-				{getUsernameAnimated(actualEvent.username)}
+				{getUsernameAnimated(actualEvent.userName)}
 				&nbsp;se ha unido al equipo de desarrollo
 			</span>
 		</div>

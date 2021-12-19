@@ -110,7 +110,7 @@ class WebServer implements IWebServer {
 
 					this._lastInfo.lastFollower = name;
 					this._twitchEventClient.logger.info(`Follow -> ${name}`);
-					this._socketServer.emit(SocketTopics.FOLLOW, name);
+					this._socketServer.emit(SocketTopics.FOLLOW, { userName: name });
 				}
 			);
 
@@ -139,7 +139,9 @@ class WebServer implements IWebServer {
 					this._twitchEventClient.logger.info(
 						`Subscription event -> ${name}; Is gift -> ${isGift}`
 					);
-					this._socketServer.emit(SocketTopics.SUBSCRIPTION, name);
+					this._socketServer.emit(SocketTopics.SUBSCRIPTION, {
+						userName: name,
+					});
 				}
 			);
 
@@ -151,7 +153,9 @@ class WebServer implements IWebServer {
 					this._twitchEventClient.logger.info(
 						`Subscription end event -> ${name}; Is gift -> ${isGift}`
 					);
-					this._socketServer.emit(SocketTopics.ENDSUBSCRIPTION);
+					this._socketServer.emit(SocketTopics.ENDSUBSCRIPTION, {
+						userName: name,
+					});
 				}
 			);
 

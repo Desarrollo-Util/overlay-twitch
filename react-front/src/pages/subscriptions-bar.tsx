@@ -114,7 +114,7 @@ const getCurrentSubs = async (
 
 		setCurrentSubs(body);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 

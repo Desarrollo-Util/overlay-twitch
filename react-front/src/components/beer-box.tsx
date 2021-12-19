@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { BeerEvent } from '../types/alert-box-state.type';
+//@ts-ignore
+import { BeerEvent } from '../types/alert-event.type';
 
 type BeerBoxProps = {
 	actualEvent: BeerEvent;
@@ -18,7 +19,7 @@ const BeerBox: FC<BeerBoxProps> = ({ actualEvent, onEnd }) => {
 				onEnded={onEnd}
 			/>
 			<span className='message-alertbox'>
-				{getUsernameAnimated(actualEvent.username)}
+				{getUsernameAnimated(actualEvent.userName)}
 				&nbsp;ha canjeado un zumito!!
 			</span>
 		</div>

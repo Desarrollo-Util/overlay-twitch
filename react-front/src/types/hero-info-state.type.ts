@@ -1,7 +1,7 @@
 export enum HeroTypes {
 	FOLLOW,
 	SUBSCRIPTION,
-	BITS,
+	CHEER,
 }
 
 export type HeroInfoState = Partial<Record<HeroTypes, string>>;

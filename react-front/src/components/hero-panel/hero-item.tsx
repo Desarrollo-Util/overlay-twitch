@@ -1,5 +1,5 @@
 import { ComponentProps, FC } from 'react';
-import { HeroInfoState, HeroTypes } from '../types/hero-info-state.type';
+import { HeroInfoState, HeroTypes } from '../../types/hero-info-state.type';
 
 type HeroItemProps = {
 	icon: FC<ComponentProps<'svg'>>;

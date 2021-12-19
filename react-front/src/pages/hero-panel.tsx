@@ -1,11 +1,16 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
-import HeroItem from '../components/hero-item';
+import HeroItem from '../components/hero-panel/hero-item';
 import SocketTopics from '../constants/socket-topics.enum';
 import BitsIcon from '../icons/bits-icon';
 import FollowIcon from '../icons/follow-icon';
 import SubscriptionIcon from '../icons/subscription-icon';
 import createSocket from '../lib/create-socket';
 import { HeroInfoState, HeroTypes } from '../types/hero-info-state.type';
+import {
+	CheerResponse,
+	FollowResponse,
+	SubscriptionResponse,
+} from '../types/socket-response.type';
 
 const HeroPanel: FC = () => {
 	const socketClient = createSocket();
@@ -13,16 +18,19 @@ const HeroPanel: FC = () => {
 
 	const followHandler = getOnFollowHandler(setHeroState);
 	const subHandler = getOnSubHandler(setHeroState);
+	const cheerHandler = getOnCheerHandler(setHeroState);
 
 	useEffect(() => {
 		getHeroInfo(setHeroState);
 
 		socketClient.on(SocketTopics.FOLLOW, followHandler);
 		socketClient.on(SocketTopics.SUBSCRIPTION, subHandler);
+		socketClient.on(SocketTopics.CHEER, cheerHandler);
 
 		return () => {
 			socketClient.off(SocketTopics.FOLLOW, followHandler);
 			socketClient.off(SocketTopics.SUBSCRIPTION, subHandler);
+			socketClient.off(SocketTopics.CHEER, cheerHandler);
 		};
 	}, []);
 
@@ -43,7 +51,7 @@ const HeroPanel: FC = () => {
 			<HeroItem
 				icon={BitsIcon}
 				label='LAST BITS'
-				type={HeroTypes.BITS}
+				type={HeroTypes.CHEER}
 				heroState={heroState}
 			/>
 		</div>
@@ -88,15 +96,23 @@ const getHeroInfo = async (
 
 const getOnFollowHandler =
 	(setHeroState: Dispatch<SetStateAction<HeroInfoState | undefined>>) =>
-	(username: string) =>
-		setHeroState(heroState => ({ ...heroState, [HeroTypes.FOLLOW]: username }));
+	({ userName }: FollowResponse) =>
+		setHeroState(heroState => ({ ...heroState, [HeroTypes.FOLLOW]: userName }));
 
 const getOnSubHandler =
 	(setHeroState: Dispatch<SetStateAction<HeroInfoState | undefined>>) =>
-	(username: string) =>
+	({ userName }: SubscriptionResponse) =>
 		setHeroState(heroState => ({
 			...heroState,
-			[HeroTypes.SUBSCRIPTION]: username,
+			[HeroTypes.SUBSCRIPTION]: userName,
+		}));
+
+const getOnCheerHandler =
+	(setHeroState: Dispatch<SetStateAction<HeroInfoState | undefined>>) =>
+	({ userName }: CheerResponse) =>
+		setHeroState(heroState => ({
+			...heroState,
+			[HeroTypes.CHEER]: userName,
 		}));
 
 export default HeroPanel;

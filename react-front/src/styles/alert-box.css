@@ -1,35 +1,7 @@
-.alertbox {
-	@apply fixed bottom-24 left-1/2 w-30 flex flex-wrap;
-	transform: translateX(-50%);
-}
-
-.message-alertbox {
-	@apply mt-1_5 text-20 font-bold relative text-error;
-	font-family: 'Poppins', sans-serif;
-}
-
-.username-message-alertbox {
-	@apply relative inline-block uppercase text-24;
-	animation: animate 1.5s ease-in-out infinite;
-}
-
-@keyframes animate {
-	0%,
-	100% {
-		transform: translateY(0px);
-	}
-	20% {
-		transform: translateY(-20px);
-	}
-	40% {
-		transform: translateY(0px);
-	}
-}
-
 /* Box border animation */
 /* :root {
 	--transition-duration: 500ms;
-	--initial-delay: 500ms;
+	--first-delay: 500ms;
 	--box-width: 16rem;
 	--box-height: 9rem;
 }
@@ -43,25 +15,25 @@
 	@apply absolute w-0 h-0_125 border-t-2 border-r-2 border-primary-300 -top-0 -left-0;
 	content: '';
 	transition: width calc(var(--transition-duration)) ease
-		calc(var(--transition-duration) * 0 + var(--initial-delay));
+		calc(var(--transition-duration) * 0 + var(--first-delay));
 }
 .box-border-animated::after {
 	@apply absolute w-0_125 h-0 border-r-2 border-primary-300 -top-0 -right-0;
 	content: '';
 	transition: height calc(var(--transition-duration)) ease
-		calc(var(--transition-duration) * 1 + var(--initial-delay));
+		calc(var(--transition-duration) * 1 + var(--first-delay));
 }
 .box-border-inner-animated::before {
 	@apply absolute w-0 h-0_125 border-b-2 border-primary-300 -bottom-0 -right-0;
 	content: '';
 	transition: width calc(var(--transition-duration)) ease
-		calc(var(--transition-duration) * 2 + var(--initial-delay));
+		calc(var(--transition-duration) * 2 + var(--first-delay));
 }
 .box-border-inner-animated::after {
 	@apply absolute w-0_125 h-0 border-l-2 border-primary-300 -bottom-0 -left-0;
 	content: '';
 	transition: height calc(var(--transition-duration)) ease
-		calc(var(--transition-duration) * 3 + var(--initial-delay));
+		calc(var(--transition-duration) * 3 + var(--first-delay));
 }
 
 .rendered::before {
@@ -78,104 +50,141 @@
 } */
 
 /** Bar animation */
-.barWrapper {
-	@apply container-lg flexcol-c-c;
+.bar_wrapper {
 	--transition-duration: 1000ms;
-	--initial-delay: 350ms;
+	--first-delay: 250ms;
+	--second-delay: 650ms;
 	--bar-width: 24rem;
 	--bar-height: 9rem;
 	--upper-bar-width: 12rem;
+	@apply container-lg flexcol-c-c;
 }
 
-.barContainer {
+.bar_container {
+	@apply overflow-hidden;
 	width: var(--bar-width);
 	height: var(--bar-height);
 }
 
-.upperBar {
-	@apply relative h-1/3 w-0 bg-bg-700 flex-c-c overflow-hidden;
-	transition: width calc(var(--transition-duration))
-		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay));
+.bar_upper {
+	@apply relative h-1/3 bg-bg-700 flex-c-c overflow-hidden;
+	width: var(--upper-bar-width);
+	transform: translateX(-100%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--first-delay) + calc(var(--transition-duration) / 2));
 }
-.upperText {
+.bar_upper::before {
+	@apply absolute inset-0 bg-white;
+	transform: translateX(-100%);
+	content: '';
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--first-delay) + calc(var(--transition-duration) / 3));
+}
+.bar_upperText {
 	@apply text-24 w-full text-left text-white px-1 z-1 translate-x-32 opacity-0;
-	transition: all calc(var(--transition-duration))
-		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay) + 300ms);
-}
-.upperBar::before {
-	@apply absolute top-0 left-0 h-full w-0 bg-white;
-	content: '';
-	transition: width calc(var(--transition-duration))
-		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay) + 200ms);
-}
-.upperBar::after {
-	@apply absolute top-0 left-0 h-full w-0 bg-primary;
-	content: '';
-	transition: width calc(var(--transition-duration))
-		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay) + 450ms);
-}
-
-.upperBar-rendered {
-	width: var(--upper-bar-width);
-}
-.upperText-rendered {
-	@apply translate-x-0 opacity-100;
-}
-.upperBar-rendered::before {
-	width: var(--upper-bar-width);
-}
-.upperBar-rendered::after {
-	width: var(--upper-bar-width);
-}
-
-.lowerBar {
-	@apply relative h-2/3 w-0 bg-primary flex-c-c overflow-hidden;
-	transition: width calc(var(--transition-duration))
+	transition: all calc(var(--transition-duration) / 2)
 		cubic-bezier(0.9, 0.01, 0.46, 1.01)
-		calc(var(--transition-duration) + var(--initial-delay) - 350ms);
+		calc(var(--first-delay) + calc(var(--transition-duration) / 5));
 }
-.lowerText {
+.bar_upper::after {
+	@apply absolute inset-0 bg-primary;
+	transform: translateX(-100%);
+	content: '';
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--first-delay));
+}
+
+/* Opened transition styles upper bar */
+.bar_upper-opened {
+	transform: translateX(0%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--first-delay));
+}
+.bar_upper-opened::before {
+	transform: translateX(0%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--first-delay) + calc(var(--transition-duration) / 5));
+}
+.bar_upperText-opened {
+	@apply translate-x-0 opacity-100;
+	transition: all calc(var(--transition-duration) / 2)
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--first-delay) + calc(var(--transition-duration) / 2));
+}
+.bar_upper-opened::after {
+	transform: translateX(0%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--first-delay) + calc(var(--transition-duration) / 3));
+}
+
+.bar_lower {
+	@apply relative h-2/3 w-full bg-primary flex-c-c overflow-hidden;
+	transform: translateX(-100%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--second-delay) + calc(var(--transition-duration) / 2));
+}
+.bar_lower::before {
+	@apply absolute inset-0 bg-white;
+	transform: translateX(-100%);
+	content: '';
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--second-delay) + calc(var(--transition-duration) / 3));
+}
+.bar_lowerText {
 	@apply text-34 w-full text-left font-semibold text-white px-1 z-1 translate-x-32 opacity-0 truncate;
-	transition: all calc(var(--transition-duration))
+	transition: all calc(var(--transition-duration) / 2)
 		cubic-bezier(0.9, 0.01, 0.46, 1.01)
-		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 300ms);
+		calc(var(--second-delay) + calc(var(--transition-duration) / 5));
 }
-.lowerBar::before {
-	@apply absolute top-0 left-0 h-full w-0 bg-white;
+.bar_lower::after {
+	@apply absolute inset-0 bg-bg-700;
+	transform: translateX(-100%);
 	content: '';
-	transition: width calc(var(--transition-duration))
-		cubic-bezier(0.9, 0.01, 0.46, 1.01)
-		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 200ms);
-}
-.lowerBar::after {
-	@apply absolute top-0 left-0 h-full w-0 bg-bg-700;
-	content: '';
-	transition: width calc(var(--transition-duration))
-		cubic-bezier(0.9, 0.01, 0.46, 1.01)
-		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 450ms);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--second-delay));
 }
 
-.lowerBar-rendered {
-	width: var(--bar-width);
+/* Opened transition styles lower bar */
+.bar_lower-opened {
+	transform: translateX(0%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--second-delay));
 }
-.lowerText-rendered {
+.bar_lower-opened::before {
+	transform: translateX(0%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--second-delay) + calc(var(--transition-duration) / 5));
+}
+.bar_lowerText-opened {
 	@apply translate-x-0 opacity-100;
+	transition: all calc(var(--transition-duration) / 2)
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--second-delay) + calc(var(--transition-duration) / 2));
 }
-.lowerBar-rendered::before {
-	width: var(--bar-width);
-}
-.lowerBar-rendered::after {
-	width: var(--bar-width);
+.bar_lower-opened::after {
+	transform: translateX(0%);
+	transition: transform calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--second-delay) + calc(var(--transition-duration) / 3));
 }
 
-.subscriptionText {
+.bar_message {
 	@apply mt-1 text-white opacity-0;
 	width: var(--bar-width);
 	transition: opacity calc(var(--transition-duration))
 		cubic-bezier(0.9, 0.01, 0.46, 1.01)
-		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 650ms);
+		calc(var(--second-delay) + calc(var(--transition-duration) / 2));
 }
 
-.subscriptionText-rendered {
+.bar_message-opened {
 	@apply opacity-100;
+	transition: opacity calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--second-delay));
 }

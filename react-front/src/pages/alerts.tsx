@@ -1,95 +1,103 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import uuid from 'uuid-random';
-import SocketTopics from '../constants/socket-topics.enum';
+import FollowAlert from '../components/alerts/follow-alert';
+import TtsAlert from '../components/alerts/tts-alert';
+import { SocketTopics } from '../constants/alert-types.enum';
+import useAlertQueue from '../lib/alert-queue-reducer';
 import createSocket from '../lib/create-socket';
-import useAlertQueue from '../lib/states/alert-queue-reducer';
-import { AlertEvent, FollowEvent } from '../types/alert-box-state.type';
-import { AlertTypes } from '../types/alert-types.enum';
+import {
+	AlertEvent,
+	CheerEvent,
+	FollowEvent,
+	SubscriptionMessageEvent,
+} from '../types/alert-event.type';
+import {
+	CheerResponse,
+	FollowResponse,
+	SubscriptionMessageResponse,
+} from '../types/socket-response.type';
 
 const Alerts = () => {
-	const [rendered, setRendered] = useState<boolean>(false);
-	const { alertQueue, addNewAlert } = useAlertQueue();
+	const { alertQueue, nextAlert, addNewAlert } = useAlertQueue();
 	const socketClient = createSocket();
 
 	const followHandler = getOnFollowHandler(addNewAlert);
+	const subscriptionMessageHandler =
+		getOnSubscriptionMessageHandler(addNewAlert);
+	const cheerHandler = getOnCheerHandler(addNewAlert);
 
 	useEffect(() => {
 		socketClient.on(SocketTopics.FOLLOW, followHandler);
+		socketClient.on(
+			SocketTopics.SUBSCRIPTIONMESSAGE,
+			subscriptionMessageHandler
+		);
+		socketClient.on(SocketTopics.CHEER, cheerHandler);
 
 		return () => {
 			socketClient.off(SocketTopics.FOLLOW, followHandler);
+			socketClient.off(
+				SocketTopics.SUBSCRIPTIONMESSAGE,
+				subscriptionMessageHandler
+			);
+			socketClient.off(SocketTopics.CHEER, cheerHandler);
 		};
 	}, []);
 
-	useEffect(() => {
-		if (alertQueue.currentEvent?.type === AlertTypes.FOLLOW) setRendered(true);
-	}, [alertQueue.currentEvent]);
-
-	console.log(rendered, alertQueue);
-
-	if (
-		alertQueue.currentEvent &&
-		alertQueue.currentEvent.type === AlertTypes.FOLLOW
-	)
+	if (alertQueue.currentEvent?.type === SocketTopics.FOLLOW)
 		return (
-			<div className='barWrapper'>
-				<div className='barContainer'>
-					<div className={`upperBar ${rendered ? 'upperBar-rendered' : ''}`}>
-						<span
-							className={`upperText ${rendered ? 'upperText-rendered' : ''}`}>
-							FOLLOWER
-						</span>
-					</div>
-					<div className={`lowerBar ${rendered ? 'lowerBar-rendered' : ''}`}>
-						<span
-							className={`lowerText ${rendered ? 'lowerText-rendered' : ''}`}>
-							{alertQueue.currentEvent.username}
-						</span>
-					</div>
-				</div>
-				<span
-					className={`subscriptionText ${
-						rendered ? 'subscriptionText-rendered' : ''
-					}`}></span>
-			</div>
+			<FollowAlert
+				followEvent={alertQueue.currentEvent}
+				nextAlert={nextAlert}
+			/>
 		);
-	else return null;
+	if (
+		alertQueue.currentEvent?.type === SocketTopics.SUBSCRIPTIONMESSAGE ||
+		alertQueue.currentEvent?.type === SocketTopics.CHEER
+	)
+		return <TtsAlert event={alertQueue.currentEvent} nextAlert={nextAlert} />;
+
+	return null;
 };
 
 export default Alerts;
 
 const getOnFollowHandler =
-	(addNewAlert: (newEvent: AlertEvent) => void) => (username: string) => {
+	(addNewAlert: (newEvent: AlertEvent) => void) =>
+	({ userName }: FollowResponse) => {
 		const newAlert: FollowEvent = {
 			id: uuid(),
-			username,
-			type: AlertTypes.FOLLOW,
+			userName,
+			type: SocketTopics.FOLLOW,
 		};
 
 		addNewAlert(newAlert);
 	};
 
-//#region Box animation
-// <div className='container-lg flex-c-c mt-0_5'>
-// 	<div className={`box-border-animated ${rendered ? 'rendered' : ''}`}>
-// 		<div
-// 			className={`box-border-inner-animated ${
-// 				rendered ? 'rendered-inner' : ''
-// 			}`}></div>
-// 	</div>
-// </div>;
-//#endregion
+const getOnSubscriptionMessageHandler =
+	(addNewAlert: (newEvent: AlertEvent) => void) =>
+	({ userName, message, months }: SubscriptionMessageResponse) => {
+		const newAlert: SubscriptionMessageEvent = {
+			id: uuid(),
+			userName,
+			message,
+			months,
+			type: SocketTopics.SUBSCRIPTIONMESSAGE,
+		};
 
-/**
- * 		const speechSynthesis = window.speechSynthesis;
-		const voices = speechSynthesis.getVoices();
-		const utterThis = new SpeechSynthesisUtterance();
-		utterThis.volume = 100;
-		utterThis.voice = voices[7];
-		utterThis.text =
-			'Hola, soy nuevo en el canal, sois la puta polla en vinagre, jaja salu2';
+		addNewAlert(newAlert);
+	};
 
+const getOnCheerHandler =
+	(addNewAlert: (newEvent: AlertEvent) => void) =>
+	({ userName, message, bits }: CheerResponse) => {
+		const newAlert: CheerEvent = {
+			id: uuid(),
+			userName,
+			message,
+			bits,
+			type: SocketTopics.CHEER,
+		};
 
-		utterThis.onend = () => console.log('SACABO');
-		speechSynthesis.speak(utterThis);
- */
+		addNewAlert(newAlert);
+	};

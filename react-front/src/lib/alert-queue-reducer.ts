@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AlertEvent, AlertQueueState } from '../../types/alert-box-state.type';
+import { AlertEvent, AlertQueueState } from '../types/alert-event.type';
 
 const useAlertQueue = () => {
 	const [alertQueue, setAlertQueue] = useState<AlertQueueState<AlertEvent>>({
@@ -28,7 +28,7 @@ const useAlertQueue = () => {
 			const prevEventList = [...prevState.eventList];
 
 			return {
-				currentEvent: prevEventList.shift(),
+				currentEvent: prevEventList.shift() || undefined,
 				eventList: prevEventList,
 			};
 		});
