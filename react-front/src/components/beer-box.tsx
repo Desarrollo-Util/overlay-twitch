@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { BeerBoxEvent } from '../types/alert-box-state.type';
+import { BeerEvent } from '../types/alert-box-state.type';
 
 type BeerBoxProps = {
-	actualEvent: BeerBoxEvent;
+	actualEvent: BeerEvent;
 	onEnd: () => void;
 };
 

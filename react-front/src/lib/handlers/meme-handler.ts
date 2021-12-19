@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import uuid from 'uuid-random';
-import { MemeBoxEvent, QueueBoxEvent } from '../../types/alert-box-state.type';
+import { AlertEvent, MemeEvent } from '../../types/alert-box-state.type';
 import { AlertTypes } from '../../types/alert-types.enum';
 import { RewardTypes } from '../../types/reward-types.enum';
 
-const getMemeEventHandler = (addEvent: (newEvent: QueueBoxEvent) => void) =>
+const getMemeEventHandler = (addEvent: (newEvent: AlertEvent) => void) =>
 	useCallback((rewardType: RewardTypes) => {
-		const newEvent: MemeBoxEvent = {
+		const newEvent: MemeEvent = {
 			id: uuid(),
 			type: AlertTypes.MEME,
 			reward: rewardType,

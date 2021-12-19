@@ -140,6 +140,9 @@ module.exports = {
 		),
 		borderWidth: generatePixelRules(0, 10),
 		fontSize: generatePixelRules(10, 60),
+		fontFamily: {
+			text: ['Poppins', 'sans-serif'],
+		},
 		padding: {
 			full: '100%',
 			...standardRemValues,
@@ -152,6 +155,7 @@ module.exports = {
 			auto: 'auto',
 			screen: '100vh',
 			full: '100%',
+			...generateColumnRules([2, 3, 4, 5, 6, 8, 10, 12]),
 			...standardRemValues,
 		},
 		width: {

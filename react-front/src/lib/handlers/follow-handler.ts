@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import uuid from 'uuid-random';
-import { AlertBoxEvent, QueueBoxEvent } from '../../types/alert-box-state.type';
+import { AlertEvent, FollowEvent } from '../../types/alert-box-state.type';
 import { AlertTypes } from '../../types/alert-types.enum';
 
-const getFollowEventHandler = (addEvent: (newEvent: QueueBoxEvent) => void) =>
+const getFollowEventHandler = (addEvent: (newEvent: AlertEvent) => void) =>
 	useCallback((username: string) => {
-		const newEvent: AlertBoxEvent = {
+		const newEvent: FollowEvent = {
 			id: uuid(),
 			username,
 			type: AlertTypes.FOLLOW,

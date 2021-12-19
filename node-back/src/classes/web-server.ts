@@ -8,6 +8,7 @@ import {
 	EventSubChannelCheerEvent,
 	EventSubChannelRedemptionAddEvent,
 } from '@twurple/eventsub';
+import SocketTopics from 'constants/socket-topics.enum';
 import cors from 'cors';
 import express, { Express } from 'express';
 import { readFile, writeFile } from 'fs/promises';
@@ -107,10 +108,9 @@ class WebServer implements IWebServer {
 				({ userDisplayName, userName }) => {
 					const name = userName || userDisplayName;
 
-					this._lastInfo.numberOfSubscriptions += 1;
 					this._lastInfo.lastFollower = name;
 					this._twitchEventClient.logger.info(`Follow -> ${name}`);
-					this._socketServer.emit('follow', name);
+					this._socketServer.emit(SocketTopics.FOLLOW, name);
 				}
 			);
 
@@ -122,7 +122,7 @@ class WebServer implements IWebServer {
 					this._twitchEventClient.logger.info(
 						`Subscription message event -> ${name}; Cumulative months -> ${cumulativeMonths}`
 					);
-					this._socketServer.emit('subscription-message', {
+					this._socketServer.emit(SocketTopics.SUBSCRIPTIONMESSAGE, {
 						userName: name,
 						message: messageText,
 						months: cumulativeMonths,
@@ -135,10 +135,11 @@ class WebServer implements IWebServer {
 				({ userDisplayName, userName, isGift }) => {
 					const name = userName || userDisplayName;
 
+					this._lastInfo.numberOfSubscriptions += 1;
 					this._twitchEventClient.logger.info(
 						`Subscription event -> ${name}; Is gift -> ${isGift}`
 					);
-					this._socketServer.emit('subscription', name);
+					this._socketServer.emit(SocketTopics.SUBSCRIPTION, name);
 				}
 			);
 
@@ -150,7 +151,7 @@ class WebServer implements IWebServer {
 					this._twitchEventClient.logger.info(
 						`Subscription end event -> ${name}; Is gift -> ${isGift}`
 					);
-					this._socketServer.emit('end-subscription');
+					this._socketServer.emit(SocketTopics.ENDSUBSCRIPTION);
 				}
 			);
 
@@ -180,7 +181,7 @@ class WebServer implements IWebServer {
 					this._twitchEventClient.logger.info(
 						`Cheer event -> ${name}; Bits -> ${bits}`
 					);
-					this._socketServer.emit('cheer', {
+					this._socketServer.emit(SocketTopics.CHEER, {
 						userName: name,
 						message,
 						bits,

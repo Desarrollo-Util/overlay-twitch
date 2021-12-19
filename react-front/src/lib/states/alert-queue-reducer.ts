@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import { QueueBoxEvent, QueueBoxState } from '../../types/alert-box-state.type';
+import { AlertEvent, AlertQueueState } from '../../types/alert-box-state.type';
 
-const queueReducer = () => {
-	const [queueBoxState, setQueueBoxState] = useState<
-		QueueBoxState<QueueBoxEvent>
-	>({
+const useAlertQueue = () => {
+	const [alertQueue, setAlertQueue] = useState<AlertQueueState<AlertEvent>>({
 		currentEvent: undefined,
 		eventList: [],
 	});
 
-	const addNewEvent = (newEvent: QueueBoxEvent) => {
-		setQueueBoxState(prevState => {
+	const addNewAlert = (newEvent: AlertEvent) => {
+		setAlertQueue(prevState => {
 			if (!prevState.currentEvent)
 				return {
 					currentEvent: newEvent,
@@ -25,8 +23,8 @@ const queueReducer = () => {
 		});
 	};
 
-	const nextEvent = () => {
-		setQueueBoxState(prevState => {
+	const nextAlert = () => {
+		setAlertQueue(prevState => {
 			const prevEventList = [...prevState.eventList];
 
 			return {
@@ -36,7 +34,7 @@ const queueReducer = () => {
 		});
 	};
 
-	return { queueBoxState, addNewEvent, nextEvent };
+	return { alertQueue, addNewAlert, nextAlert };
 };
 
-export default queueReducer;
+export default useAlertQueue;

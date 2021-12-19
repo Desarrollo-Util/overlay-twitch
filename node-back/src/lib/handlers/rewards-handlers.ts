@@ -1,6 +1,8 @@
 import { getRandomPhrase } from '@Lib/phrases';
 import { ChatClient } from '@twurple/chat';
 import { EventSubChannelRedemptionAddEvent } from '@twurple/eventsub';
+import Rewards from 'constants/rewards.enum';
+import SocketTopics from 'constants/socket-topics.enum';
 import { Server as SocketServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
@@ -16,7 +18,8 @@ export const getRewardsHandlers = (
 	'78e45fd3-91e6-40be-bc5e-c9ec84152ffb': (
 		redemptionEvent: EventSubChannelRedemptionAddEvent
 	) => {
-		socketServer.emit('beer', {
+		socketServer.emit(SocketTopics.REWARDS, {
+			type: Rewards.BEER,
 			userName: redemptionEvent.userDisplayName,
 			message: redemptionEvent.input,
 		});
@@ -30,10 +33,10 @@ export const getRewardsHandlers = (
 	},
 	//Explorer
 	'1c6f6968-8469-45ee-8c5f-bf779c67608a': () => {
-		socketServer.emit('explorer', 'explorer');
+		socketServer.emit(SocketTopics.REWARDS, { type: Rewards.EXPLORER });
 	},
 	//Shit
 	'564b37da-728a-48a3-9d1c-16c9f87154b6': () => {
-		socketServer.emit('shit', 'shit');
+		socketServer.emit(SocketTopics.REWARDS, { type: Rewards.SHIT });
 	},
 });

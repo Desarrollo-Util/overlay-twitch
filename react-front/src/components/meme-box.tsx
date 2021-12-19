@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { MemeBoxEvent } from '../types/alert-box-state.type';
+import { MemeEvent } from '../types/alert-box-state.type';
 
 type MemeBoxProps = {
-	actualEvent: MemeBoxEvent;
+	actualEvent: MemeEvent;
 	onEnd: () => void;
 };
 

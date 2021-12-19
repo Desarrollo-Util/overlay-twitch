@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { AlertBoxEvent } from '../types/alert-box-state.type';
+import { FollowEvent } from '../types/alert-box-state.type';
 
 type AlertBoxProps = {
-	actualEvent: AlertBoxEvent;
+	actualEvent: FollowEvent;
 	onEnd: () => void;
 };
 

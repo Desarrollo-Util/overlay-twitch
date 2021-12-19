@@ -1,7 +1,7 @@
 body {
-	@apply w-screen h-screen bg-gray-700;
+	@apply font-text w-screen h-screen bg-gray-700;
 }
 
 .main {
-	@apply w-full h-full;
+	@apply w-screen h-screen;
 }

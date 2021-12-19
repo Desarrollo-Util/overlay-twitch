@@ -6,6 +6,7 @@ import {
 	useRef,
 	useState,
 } from 'react';
+import SocketTopics from '../constants/socket-topics.enum';
 import createSocket from '../lib/create-socket';
 
 const GOAL_SUBS = Number(import.meta.env.VITE_SUBSCRIPTIONS_GOAL);
@@ -47,31 +48,33 @@ const SubscriptionsBar: FC = () => {
 	useEffect(() => {
 		if (!currentSubs) getCurrentSubs(setCurrentSubs);
 
-		socketClient.on('subscription', subHandler);
-		socketClient.on('end-subscription', endSubHandler);
+		socketClient.on(SocketTopics.SUBSCRIPTION, subHandler);
+		socketClient.on(SocketTopics.ENDSUBSCRIPTION, endSubHandler);
 		return () => {
-			socketClient.off('subscription', subHandler);
-			socketClient.off('end-subscription', endSubHandler);
+			socketClient.off(SocketTopics.SUBSCRIPTION, subHandler);
+			socketClient.off(SocketTopics.ENDSUBSCRIPTION, endSubHandler);
 		};
 	}, []);
 
 	return (
-		<div
-			className='flex-sb-c flex-wrap fixed top-0 left-2/4 -ml-10'
-			style={{ width: `${BAR_CTN_WIDTH}px` }}>
-			<span className='font-semibold text-16 text-white'>0</span>
-			<span className='font-semibold text-18 text-white'>
-				Objetivo suscripciones
-			</span>
-			<span className='font-semibold text-16 text-white'>{GOAL_SUBS}</span>
-			<div className='progBar'>
-				<div
-					ref={barRef}
-					style={{ width: `${barWidth}px` }}
-					className='progBar__filling'>
-					<div className='progBar__label'>
-						<div className='progBar__label__arrow'></div>
-						<span ref={textLabelRef} className='progBar__label__text'></span>
+		<div className='container-lg flex-c-c'>
+			<div
+				className='flex-sb-c flex-wrap fixed top-0 left-2/4 -ml-10'
+				style={{ width: `${BAR_CTN_WIDTH}px` }}>
+				<span className='font-semibold text-16 text-white'>0</span>
+				<span className='font-semibold text-18 text-white'>
+					Objetivo suscripciones
+				</span>
+				<span className='font-semibold text-16 text-white'>{GOAL_SUBS}</span>
+				<div className='progBar'>
+					<div
+						ref={barRef}
+						style={{ width: `${barWidth}px` }}
+						className='progBar__filling'>
+						<div className='progBar__label'>
+							<div className='progBar__label__arrow'></div>
+							<span ref={textLabelRef} className='progBar__label__text'></span>
+						</div>
 					</div>
 				</div>
 			</div>

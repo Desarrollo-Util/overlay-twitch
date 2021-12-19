@@ -1,5 +1,6 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import HeroItem from '../components/hero-item';
+import SocketTopics from '../constants/socket-topics.enum';
 import BitsIcon from '../icons/bits-icon';
 import FollowIcon from '../icons/follow-icon';
 import SubscriptionIcon from '../icons/subscription-icon';
@@ -16,12 +17,12 @@ const HeroPanel: FC = () => {
 	useEffect(() => {
 		getHeroInfo(setHeroState);
 
-		socketClient.on('follow', followHandler);
-		socketClient.on('subscription', subHandler);
+		socketClient.on(SocketTopics.FOLLOW, followHandler);
+		socketClient.on(SocketTopics.SUBSCRIPTION, subHandler);
 
 		return () => {
-			socketClient.off('follow', followHandler);
-			socketClient.off('subscription', subHandler);
+			socketClient.off(SocketTopics.FOLLOW, followHandler);
+			socketClient.off(SocketTopics.SUBSCRIPTION, subHandler);
 		};
 	}, []);
 

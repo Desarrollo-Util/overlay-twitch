@@ -1,29 +1,29 @@
 import { AlertTypes } from './alert-types.enum';
 import { RewardTypes } from './reward-types.enum';
 
-export type QueueBoxState<QueueBoxEvent> = {
-	currentEvent?: QueueBoxEvent;
-	eventList: Array<QueueBoxEvent>;
+export type AlertQueueState<AlertEvent> = {
+	currentEvent?: AlertEvent;
+	eventList: Array<AlertEvent>;
 };
 
-export type BoxEvent = {
+export type GenericEvent = {
 	id: string;
 };
 
-export type AlertBoxEvent = {
+export type FollowEvent = {
 	type: AlertTypes.FOLLOW;
 	username: string;
-} & BoxEvent;
+} & GenericEvent;
 
-export type BeerBoxEvent = {
+export type BeerEvent = {
 	type: AlertTypes.BEER;
 	username: string;
 	message: string;
-} & BoxEvent;
+} & GenericEvent;
 
-export type MemeBoxEvent = {
+export type MemeEvent = {
 	type: AlertTypes.MEME;
 	reward: RewardTypes;
-} & BoxEvent;
+} & GenericEvent;
 
-export type QueueBoxEvent = AlertBoxEvent | BeerBoxEvent | MemeBoxEvent;
+export type AlertEvent = FollowEvent | BeerEvent | MemeEvent;

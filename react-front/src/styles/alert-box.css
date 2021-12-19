@@ -25,3 +25,157 @@
 		transform: translateY(0px);
 	}
 }
+
+/* Box border animation */
+/* :root {
+	--transition-duration: 500ms;
+	--initial-delay: 500ms;
+	--box-width: 16rem;
+	--box-height: 9rem;
+}
+
+.box-border-animated {
+	@apply relative;
+	width: var(--box-width);
+	height: var(--box-height);
+}
+.box-border-animated::before {
+	@apply absolute w-0 h-0_125 border-t-2 border-r-2 border-primary-300 -top-0 -left-0;
+	content: '';
+	transition: width calc(var(--transition-duration)) ease
+		calc(var(--transition-duration) * 0 + var(--initial-delay));
+}
+.box-border-animated::after {
+	@apply absolute w-0_125 h-0 border-r-2 border-primary-300 -top-0 -right-0;
+	content: '';
+	transition: height calc(var(--transition-duration)) ease
+		calc(var(--transition-duration) * 1 + var(--initial-delay));
+}
+.box-border-inner-animated::before {
+	@apply absolute w-0 h-0_125 border-b-2 border-primary-300 -bottom-0 -right-0;
+	content: '';
+	transition: width calc(var(--transition-duration)) ease
+		calc(var(--transition-duration) * 2 + var(--initial-delay));
+}
+.box-border-inner-animated::after {
+	@apply absolute w-0_125 h-0 border-l-2 border-primary-300 -bottom-0 -left-0;
+	content: '';
+	transition: height calc(var(--transition-duration)) ease
+		calc(var(--transition-duration) * 3 + var(--initial-delay));
+}
+
+.rendered::before {
+	width: var(--box-width);
+}
+.rendered::after {
+	height: var(--box-height);
+}
+.rendered-inner::before {
+	width: var(--box-width);
+}
+.rendered-inner::after {
+	height: var(--box-height);
+} */
+
+/** Bar animation */
+.barWrapper {
+	@apply container-lg flexcol-c-c;
+	--transition-duration: 1000ms;
+	--initial-delay: 350ms;
+	--bar-width: 24rem;
+	--bar-height: 9rem;
+	--upper-bar-width: 12rem;
+}
+
+.barContainer {
+	width: var(--bar-width);
+	height: var(--bar-height);
+}
+
+.upperBar {
+	@apply relative h-1/3 w-0 bg-bg-700 flex-c-c overflow-hidden;
+	transition: width calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay));
+}
+.upperText {
+	@apply text-24 w-full text-left text-white px-1 z-1 translate-x-32 opacity-0;
+	transition: all calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay) + 300ms);
+}
+.upperBar::before {
+	@apply absolute top-0 left-0 h-full w-0 bg-white;
+	content: '';
+	transition: width calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay) + 200ms);
+}
+.upperBar::after {
+	@apply absolute top-0 left-0 h-full w-0 bg-primary;
+	content: '';
+	transition: width calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01) calc(var(--initial-delay) + 450ms);
+}
+
+.upperBar-rendered {
+	width: var(--upper-bar-width);
+}
+.upperText-rendered {
+	@apply translate-x-0 opacity-100;
+}
+.upperBar-rendered::before {
+	width: var(--upper-bar-width);
+}
+.upperBar-rendered::after {
+	width: var(--upper-bar-width);
+}
+
+.lowerBar {
+	@apply relative h-2/3 w-0 bg-primary flex-c-c overflow-hidden;
+	transition: width calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--transition-duration) + var(--initial-delay) - 350ms);
+}
+.lowerText {
+	@apply text-34 w-full text-left font-semibold text-white px-1 z-1 translate-x-32 opacity-0 truncate;
+	transition: all calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 300ms);
+}
+.lowerBar::before {
+	@apply absolute top-0 left-0 h-full w-0 bg-white;
+	content: '';
+	transition: width calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 200ms);
+}
+.lowerBar::after {
+	@apply absolute top-0 left-0 h-full w-0 bg-bg-700;
+	content: '';
+	transition: width calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 450ms);
+}
+
+.lowerBar-rendered {
+	width: var(--bar-width);
+}
+.lowerText-rendered {
+	@apply translate-x-0 opacity-100;
+}
+.lowerBar-rendered::before {
+	width: var(--bar-width);
+}
+.lowerBar-rendered::after {
+	width: var(--bar-width);
+}
+
+.subscriptionText {
+	@apply mt-1 text-white opacity-0;
+	width: var(--bar-width);
+	transition: opacity calc(var(--transition-duration))
+		cubic-bezier(0.9, 0.01, 0.46, 1.01)
+		calc(var(--transition-duration) + var(--initial-delay) - 350ms + 650ms);
+}
+
+.subscriptionText-rendered {
+	@apply opacity-100;
+}
