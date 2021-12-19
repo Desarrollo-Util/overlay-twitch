@@ -36,7 +36,6 @@ const Alerts = () => {
 				<div className='barContainer'>
 					<div className={`upperBar ${rendered ? 'upperBar-rendered' : ''}`}>
 						<span
-							oi
 							className={`upperText ${rendered ? 'upperText-rendered' : ''}`}>
 							FOLLOWER
 						</span>
