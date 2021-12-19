@@ -20,7 +20,7 @@ export const getRewardsHandlers = (
 	) => {
 		const name = redemptionEvent.userName || redemptionEvent.userDisplayName;
 		socketServer.emit(SocketTopics.REWARDS, {
-			type: Rewards.BEER,
+			reward: Rewards.BEER,
 			userName: name,
 			message: redemptionEvent.input,
 		});
@@ -38,7 +38,7 @@ export const getRewardsHandlers = (
 	) => {
 		const name = redemptionEvent.userName || redemptionEvent.userDisplayName;
 		socketServer.emit(SocketTopics.REWARDS, {
-			type: Rewards.EXPLORER,
+			reward: Rewards.EXPLORER,
 			userName: name,
 		});
 	},
@@ -48,7 +48,7 @@ export const getRewardsHandlers = (
 	) => {
 		const name = redemptionEvent.userName || redemptionEvent.userDisplayName;
 		socketServer.emit(SocketTopics.REWARDS, {
-			type: Rewards.SHIT,
+			reward: Rewards.SHIT,
 			userName: name,
 		});
 	},

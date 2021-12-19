@@ -19,5 +19,5 @@ export type CheerResponse = {
 } & GenericResponse;
 
 export type RewardResponse = {
-	type: RewardTypes;
+	reward: RewardTypes;
 } & GenericResponse;

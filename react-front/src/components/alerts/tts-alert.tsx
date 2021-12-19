@@ -6,7 +6,7 @@ import {
 } from '../../types/alert-event.type';
 
 type TtsAlertProps = {
-	event: SubscriptionMessageEvent | CheerEvent;
+	ttsEvent: SubscriptionMessageEvent | CheerEvent;
 	nextAlert: () => void;
 };
 
@@ -18,7 +18,7 @@ const TtsAlertTitles: Partial<Record<SocketTopics, string>> = {
 /**
  * Component to show subscription and cheer events with tts message
  */
-const TtsAlert: FC<TtsAlertProps> = ({ event, nextAlert }) => {
+const TtsAlert: FC<TtsAlertProps> = ({ ttsEvent, nextAlert }) => {
 	const [rendered, setRendered] = useState<boolean>(false);
 	const [tts, setTts] = useState<boolean>(false);
 
@@ -29,7 +29,7 @@ const TtsAlert: FC<TtsAlertProps> = ({ event, nextAlert }) => {
 		setTimeout(() => {
 			setRendered(true);
 		}, 100);
-	}, [event]);
+	}, [ttsEvent]);
 
 	return (
 		<div className='bar_wrapper'>
@@ -39,7 +39,7 @@ const TtsAlert: FC<TtsAlertProps> = ({ event, nextAlert }) => {
 						className={`bar_upperText ${
 							rendered ? 'bar_upperText-opened' : ''
 						}`}>
-						{TtsAlertTitles[event.type]}
+						{TtsAlertTitles[ttsEvent.type]}
 					</span>
 				</div>
 				<div
@@ -49,19 +49,19 @@ const TtsAlert: FC<TtsAlertProps> = ({ event, nextAlert }) => {
 						className={`bar_lowerText ${
 							rendered ? 'bar_lowerText-opened' : ''
 						}`}>
-						{event.userName}
+						{ttsEvent.userName}
 					</span>
 				</div>
 			</div>
 			<span className={`bar_message ${rendered ? 'bar_message-opened' : ''}`}>
-				{event.message}
+				{ttsEvent.message}
 			</span>
 			{tts && (
 				<video
 					onEnded={() => setTimeout(() => setRendered(false), 1000)}
 					className='max-w-0 max-h-0'
 					src={`https://api.streamelements.com/kappa/v2/speech?voice=es-ES-Standard-A&text=${encodeURI(
-						event.message
+						ttsEvent.message
 					)}`}
 					onPlay={event => (event.currentTarget.volume = 0.1)}
 					autoPlay
@@ -93,14 +93,3 @@ const getOnTransitionEnd =
 	};
 
 export default TtsAlert;
-
-//#region Box animation
-// <div className='container-lg flex-c-c mt-0_5'>
-// 	<div className={`box-border-animated ${rendered ? 'rendered' : ''}`}>
-// 		<div
-// 			className={`box-border-inner-animated ${
-// 				rendered ? 'rendered-inner' : ''
-// 			}`}></div>
-// 	</div>
-// </div>;
-//#endregion

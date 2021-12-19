@@ -1,55 +1,55 @@
-/* Box border animation */
-/* :root {
+/* Reward alert styles */
+.box_border {
 	--transition-duration: 500ms;
 	--first-delay: 500ms;
 	--box-width: 16rem;
 	--box-height: 9rem;
-}
-
-.box-border-animated {
-	@apply relative;
+	@apply relative flex-c-c bg-black;
 	width: var(--box-width);
 	height: var(--box-height);
 }
-.box-border-animated::before {
+.box_border::before {
 	@apply absolute w-0 h-0_125 border-t-2 border-r-2 border-primary-300 -top-0 -left-0;
 	content: '';
 	transition: width calc(var(--transition-duration)) ease
 		calc(var(--transition-duration) * 0 + var(--first-delay));
 }
-.box-border-animated::after {
+.box_border::after {
 	@apply absolute w-0_125 h-0 border-r-2 border-primary-300 -top-0 -right-0;
 	content: '';
 	transition: height calc(var(--transition-duration)) ease
 		calc(var(--transition-duration) * 1 + var(--first-delay));
 }
-.box-border-inner-animated::before {
+.box-inner {
+	@apply absolute;
+}
+.box_inner::before {
 	@apply absolute w-0 h-0_125 border-b-2 border-primary-300 -bottom-0 -right-0;
 	content: '';
 	transition: width calc(var(--transition-duration)) ease
 		calc(var(--transition-duration) * 2 + var(--first-delay));
 }
-.box-border-inner-animated::after {
+.box_inner::after {
 	@apply absolute w-0_125 h-0 border-l-2 border-primary-300 -bottom-0 -left-0;
 	content: '';
 	transition: height calc(var(--transition-duration)) ease
 		calc(var(--transition-duration) * 3 + var(--first-delay));
 }
 
-.rendered::before {
+.box_border-rendered::before {
 	width: var(--box-width);
 }
-.rendered::after {
+.box_border-rendered::after {
 	height: var(--box-height);
 }
-.rendered-inner::before {
+.box_inner-rendered::before {
 	width: var(--box-width);
 }
-.rendered-inner::after {
+.box_inner-rendered::after {
 	height: var(--box-height);
-} */
+}
 
-/** Bar animation */
+/** Follow alert and tts alert styles */
 .bar_wrapper {
 	--transition-duration: 1000ms;
 	--first-delay: 250ms;
@@ -59,7 +59,6 @@
 	--upper-bar-width: 12rem;
 	@apply container-lg flexcol-c-c;
 }
-
 .bar_container {
 	@apply overflow-hidden;
 	width: var(--bar-width);
@@ -182,7 +181,6 @@
 		cubic-bezier(0.9, 0.01, 0.46, 1.01)
 		calc(var(--second-delay) + calc(var(--transition-duration) / 2));
 }
-
 .bar_message-opened {
 	@apply opacity-100;
 	transition: opacity calc(var(--transition-duration))
