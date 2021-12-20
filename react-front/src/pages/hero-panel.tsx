@@ -62,8 +62,8 @@ const getHeroInfo = async (
 	setHeroState: Dispatch<SetStateAction<HeroInfoState | undefined>>
 ) => {
 	const lastFollowerResponse = await fetch(
-		`http://${import.meta.env.VITE_BACKEND_HOST}:${
-			import.meta.env.VITE_BACKEND_PORT
+		`${import.meta.env.VITE_NODE_ENV === 'production' ? 'https' : 'http'}://${
+			import.meta.env.VITE_BACKEND_HOST
 		}/last-follower`,
 		{
 			method: 'GET',
@@ -74,8 +74,8 @@ const getHeroInfo = async (
 	);
 
 	const lastSubscriberResponse = await fetch(
-		`http://${import.meta.env.VITE_BACKEND_HOST}:${
-			import.meta.env.VITE_BACKEND_PORT
+		`${import.meta.env.VITE_NODE_ENV === 'production' ? 'https' : 'http'}://${
+			import.meta.env.VITE_BACKEND_HOST
 		}/last-subscriber`,
 		{
 			method: 'GET',

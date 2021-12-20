@@ -5,8 +5,8 @@ let socket: SocketClient;
 const createSocket = () => {
 	if (!socket)
 		socket = io(
-			`ws://${import.meta.env.VITE_BACKEND_HOST}:${
-				import.meta.env.VITE_BACKEND_PORT
+			`${import.meta.env.VITE_NODE_ENV === 'production' ? 'wss' : 'ws'}://${
+				import.meta.env.VITE_BACKEND_HOST
 			}`,
 			{
 				transports: ['websocket'],

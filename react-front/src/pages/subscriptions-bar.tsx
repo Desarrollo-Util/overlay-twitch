@@ -100,8 +100,8 @@ const getCurrentSubs = async (
 ) => {
 	try {
 		const response = await fetch(
-			`http://${import.meta.env.VITE_BACKEND_HOST}:${
-				import.meta.env.VITE_BACKEND_PORT
+			`${import.meta.env.VITE_NODE_ENV === 'production' ? 'https' : 'http'}://${
+				import.meta.env.VITE_BACKEND_HOST
 			}/subscriptions`,
 			{
 				method: 'GET',

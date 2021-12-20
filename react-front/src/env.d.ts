@@ -2,7 +2,7 @@
 
 interface ImportMetaEnv {
 	readonly VITE_BACKEND_HOST: string;
-	readonly VITE_BACKEND_PORT: number;
+	readonly VITE_NODE_ENV: 'development' | 'production';
 	readonly VITE_SUBSCRIPTIONS_GOAL: number;
 }
 
