@@ -38,17 +38,6 @@ const Alerts = () => {
 		socketClient.on(SocketTopics.CHEER, cheerHandler);
 		socketClient.on(SocketTopics.REWARDS, rewardsHandler);
 
-		// setTimeout(
-		// 	() =>
-		// 		addNewAlert({
-		// 			type: SocketTopics.REWARDS,
-		// 			id: uuid(),
-		// 			userName: 'yeah',
-		// 			reward: RewardTypes.BEER,
-		// 		}),
-		// 	1000
-		// );
-
 		return () => {
 			socketClient.off(SocketTopics.FOLLOW, followHandler);
 			socketClient.off(

@@ -1,6 +1,5 @@
 import { io } from 'socket.io-client';
 import { SocketClient } from '../types/socket-client.type';
-
 let socket: SocketClient;
 
 const createSocket = () => {

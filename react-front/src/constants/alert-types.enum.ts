@@ -9,6 +9,5 @@ export enum SocketTopics {
 
 export enum RewardTypes {
 	BEER = 'BEER',
-	EXPLORER = 'EXPLORER',
 	SHIT = 'SHIT',
 }

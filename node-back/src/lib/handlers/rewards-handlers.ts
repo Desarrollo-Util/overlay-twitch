@@ -32,16 +32,6 @@ export const getRewardsHandlers = (
 		const phrase = await getRandomPhrase();
 		chatClient.say(redemptionEvent.broadcasterName, `/me ${phrase}`);
 	},
-	//Explorer
-	'1c6f6968-8469-45ee-8c5f-bf779c67608a': (
-		redemptionEvent: EventSubChannelRedemptionAddEvent
-	) => {
-		const name = redemptionEvent.userName || redemptionEvent.userDisplayName;
-		socketServer.emit(SocketTopics.REWARDS, {
-			reward: Rewards.EXPLORER,
-			userName: name,
-		});
-	},
 	//Shit
 	'564b37da-728a-48a3-9d1c-16c9f87154b6': (
 		redemptionEvent: EventSubChannelRedemptionAddEvent
