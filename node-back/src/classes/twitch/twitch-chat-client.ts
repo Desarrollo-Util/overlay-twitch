@@ -70,11 +70,18 @@ class TwitchChatClient implements ITwitchChatClient {
 		for (const [index, cronJob] of cronJobs.entries()) {
 			const taskJob = new AsyncTask(
 				index.toString(),
-				async () =>
-					await this._chatClient.say(
-						this._twitchApiClient.user.name,
-						cronJob.message
-					),
+				async () => {
+					const stream =
+						await this._twitchApiClient.apiClient.streams.getStreamByUserName(
+							this._twitchApiClient.user.name
+						);
+
+					if (stream)
+						await this._chatClient.say(
+							this._twitchApiClient.user.name,
+							cronJob.message
+						);
+				},
 				(err: Error) => console.error(`Error at cron messages: ${err}`)
 			);
 
