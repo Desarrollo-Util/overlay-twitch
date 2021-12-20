@@ -28,6 +28,7 @@
 		"@twurple/eventsub": "^5.0.13",
 		"@twurple/eventsub-ngrok": "^5.0.13",
 		"cors": "^2.8.5",
+		"discord.js": "^13.3.1",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.2",
 		"got": "^11.8.2",

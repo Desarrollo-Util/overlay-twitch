@@ -25,6 +25,9 @@ const iocSymbols = {
 	//#region Server
 	WebServer: Symbol.for('WebServer'),
 	//#endregion
+	//#region Discord
+	DiscordWebhookURL: Symbol.for('DiscordWebhookURL'),
+	//#endregion
 };
 
 export default iocSymbols;

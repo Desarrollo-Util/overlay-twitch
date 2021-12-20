@@ -10,6 +10,7 @@ import {
 } from '@twurple/eventsub';
 import SocketTopics from 'constants/socket-topics.enum';
 import cors from 'cors';
+import { WebhookClient } from 'discord.js';
 import express, { Express } from 'express';
 import { readFile, writeFile } from 'fs/promises';
 import http, { Server as HttpServer } from 'http';
@@ -38,7 +39,9 @@ class WebServer implements IWebServer {
 		@inject(iocSymbols.TwitchChatClient)
 		private _twitchChatClient: ITwitchChatClient,
 		@inject(iocSymbols.TwitchEventClient)
-		private _twitchEventClient: ITwitchEventClient
+		private _twitchEventClient: ITwitchEventClient,
+		@inject(iocSymbols.DiscordWebhookURL)
+		private readonly _discordWebhookUrl: string
 	) {
 		this._logger = createLogger({
 			name: 'Web-Server',
@@ -103,6 +106,18 @@ class WebServer implements IWebServer {
 		);
 
 		try {
+			await this._twitchEventClient.eventClient.subscribeToStreamOnlineEvents(
+				this._twitchApiClient.user.id,
+				async ({ getStream }) => {
+					const stream = await getStream();
+					const webhook = new WebhookClient({ url: this._discordWebhookUrl });
+
+					await webhook.send(
+						`@everyone ${stream.title} - Ya estamos en directo, pásate!! -> https://www.twitch.tv/desarrolloutil`
+					);
+				}
+			);
+
 			await this._twitchEventClient.eventClient.subscribeToChannelFollowEvents(
 				this._twitchApiClient.user.id,
 				({ userDisplayName, userName }) => {
