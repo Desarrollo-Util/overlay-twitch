@@ -48,9 +48,10 @@ class TwitchEventClient implements ITwitchEventClient {
 		await this._apiClient.eventSub.deleteAllSubscriptions();
 
 		let adapter;
-		if (this._hostName)
+		if (this._hostName && this._portEventSub)
 			adapter = new ReverseProxyAdapter({
 				hostName: this._hostName,
+				port: this._portEventSub,
 			});
 		else if (this._portEventSub) {
 			const tunnel = await localtunnel({ port: this._portEventSub });
@@ -59,8 +60,7 @@ class TwitchEventClient implements ITwitchEventClient {
 				hostName: new URL(tunnel.url).hostname,
 				port: this._portEventSub,
 			});
-		} else
-			throw new Error('No PORT_EVENTSUB or HOSTNAME environments variables');
+		} else throw new Error('PORT_EVENTSUB environment variable not defined');
 
 		const twitchEventListener = new EventSubListener({
 			apiClient: this._apiClient,
