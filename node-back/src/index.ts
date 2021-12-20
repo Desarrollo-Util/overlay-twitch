@@ -57,6 +57,9 @@ const startServer = async () => {
 	iocContainer
 		.bind<number>(iocSymbols.PortEventSub)
 		.toConstantValue(Number(process.env['PORT_EVENTSUB'] as string));
+	iocContainer
+		.bind<string>(iocSymbols.DiscordWebhookURL)
+		.toConstantValue(process.env['DISCORD_WEBHOOK_URL'] as string);
 
 	//#endregion
 
