@@ -27,7 +27,7 @@ const RewardAlert: FC<RewardAlertProps> = ({ rewardEvent, nextAlert }) => {
 					className={`box__video ${rendered ? 'box__video--rendered' : ''}`}
 					src={`${RewardAlertMedia[rewardEvent.reward]}?id=${rewardEvent.id}`}
 					controls={false}
-					onPlay={event => (event.currentTarget.volume = 0.05)}
+					onPlay={event => (event.currentTarget.volume = 0.3)}
 					onTransitionEnd={onTransitionEnd}
 					onEnded={() => setRendered(false)}
 				/>

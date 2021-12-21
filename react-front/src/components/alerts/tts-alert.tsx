@@ -64,7 +64,7 @@ const TtsAlert: FC<TtsAlertProps> = ({ ttsEvent, nextAlert }) => {
 					src={`https://api.streamelements.com/kappa/v2/speech?voice=es-ES-Standard-A&text=${encodeURI(
 						ttsEvent.message
 					)}`}
-					onPlay={event => (event.currentTarget.volume = 0.1)}
+					onPlay={event => (event.currentTarget.volume = 0.3)}
 					autoPlay
 				/>
 			)}

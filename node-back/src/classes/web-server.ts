@@ -108,8 +108,8 @@ class WebServer implements IWebServer {
 		try {
 			await this._twitchEventClient.eventClient.subscribeToStreamOnlineEvents(
 				this._twitchApiClient.user.id,
-				async ({ getStream }) => {
-					const stream = await getStream();
+				async onlineEvent => {
+					const stream = await onlineEvent.getStream();
 					const webhook = new WebhookClient({ url: this._discordWebhookUrl });
 
 					await webhook.send(
@@ -137,11 +137,13 @@ class WebServer implements IWebServer {
 					this._twitchEventClient.logger.info(
 						`Subscription message event -> ${name}; Cumulative months -> ${cumulativeMonths}`
 					);
-					this._socketServer.emit(SocketTopics.SUBSCRIPTIONMESSAGE, {
-						userName: name,
-						message: messageText,
-						months: cumulativeMonths,
-					});
+
+					if (messageText)
+						this._socketServer.emit(SocketTopics.SUBSCRIPTIONMESSAGE, {
+							userName: name,
+							message: messageText,
+							months: cumulativeMonths,
+						});
 				}
 			);
 
@@ -200,11 +202,13 @@ class WebServer implements IWebServer {
 					this._twitchEventClient.logger.info(
 						`Cheer event -> ${name}; Bits -> ${bits}`
 					);
-					this._socketServer.emit(SocketTopics.CHEER, {
-						userName: name,
-						message,
-						bits,
-					});
+
+					if (message)
+						this._socketServer.emit(SocketTopics.CHEER, {
+							userName: name,
+							message,
+							bits,
+						});
 				}
 			);
 		} catch (error: any) {
