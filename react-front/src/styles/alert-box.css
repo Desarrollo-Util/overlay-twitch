@@ -103,7 +103,7 @@
 		calc(var(--first-delay) + calc(var(--transition-duration) / 3));
 }
 .bar__upperText {
-	@apply text-24 w-full text-left text-white px-1 z-1 translate-x-32 opacity-0;
+	@apply text-24 w-full text-left text-white px-1 z-1 translate-x-8 opacity-0;
 	transition: all calc(var(--transition-duration) / 2)
 		cubic-bezier(0.9, 0.01, 0.46, 1.01)
 		calc(var(--first-delay) + calc(var(--transition-duration) / 5));
@@ -157,7 +157,7 @@
 		calc(var(--second-delay) + calc(var(--transition-duration) / 3));
 }
 .bar__lowerText {
-	@apply text-34 w-full text-left font-semibold text-white px-1 z-1 translate-x-32 opacity-0 truncate;
+	@apply text-34 w-full text-left font-semibold text-white px-1 z-1 translate-x-8 opacity-0 truncate;
 	transition: all calc(var(--transition-duration) / 2)
 		cubic-bezier(0.9, 0.01, 0.46, 1.01)
 		calc(var(--second-delay) + calc(var(--transition-duration) / 5));

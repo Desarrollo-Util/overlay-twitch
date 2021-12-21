@@ -4,7 +4,6 @@ const {
 	generateRemRules,
 	generateIntRules,
 	flexPlugin,
-	absolutePlugin,
 	transitionPlugin,
 	truncatePlugin,
 	containerPlugin,
@@ -115,12 +114,6 @@ const standardRemValues = {
 	...generateRemRules(25, 100, 1),
 };
 
-const negativeRemValues = {
-	...generateRemRules(-5, 0, 0.125),
-	...generateRemRules(-10, -5, 0.25),
-	...generateRemRules(-25, -10, 0.5),
-};
-
 const breakpoints = {
 	xs: 450,
 	sm: 768,
@@ -143,34 +136,6 @@ module.exports = {
 		fontFamily: {
 			text: ['Poppins', 'sans-serif'],
 		},
-		padding: {
-			full: '100%',
-			...standardRemValues,
-		},
-		margin: {
-			...standardRemValues,
-			...negativeRemValues,
-		},
-		height: {
-			auto: 'auto',
-			screen: '100vh',
-			full: '100%',
-			...generateColumnRules([2, 3, 4, 5, 6, 8, 10, 12]),
-			...standardRemValues,
-		},
-		width: {
-			auto: 'auto',
-			screen: '100vw',
-			full: '100%',
-			...generateColumnRules([2, 3, 4, 5, 6, 8, 10, 12]),
-			...standardRemValues,
-		},
-		maxHeight: {
-			auto: 'auto',
-			screen: '100vh',
-			full: '100%',
-			...standardRemValues,
-		},
 		maxWidth: {
 			auto: 'auto',
 			screen: '100vw',
@@ -189,15 +154,33 @@ module.exports = {
 			full: '100%',
 			...standardRemValues,
 		},
-		top: {},
-		right: {},
-		left: {},
-		bottom: {},
+		spacing: standardRemValues,
 		zIndex: generateIntRules(0, 100),
+		extend: {
+			padding: {
+				full: '100%',
+			},
+			height: {
+				auto: 'auto',
+				screen: '100vh',
+				full: '100%',
+				...generateColumnRules([2, 3, 4, 5, 6, 8, 10, 12]),
+			},
+			width: {
+				auto: 'auto',
+				screen: '100vw',
+				full: '100%',
+				...generateColumnRules([2, 3, 4, 5, 6, 8, 10, 12]),
+			},
+			maxHeight: {
+				auto: 'auto',
+				screen: '100vh',
+				full: '100%',
+			},
+		},
 	},
 	plugins: [
 		flexPlugin(['responsive']),
-		absolutePlugin(-5, 5, 0.125),
 		transitionPlugin(0, 2000, 125),
 		truncatePlugin(20),
 		containerPlugin(breakpoints),
