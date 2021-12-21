@@ -24,5 +24,5 @@
 }
 
 .progBar__text {
-	@apply block font-bold text-white text-center leading-6;
+	@apply block font-bold text-white text-center leading-7;
 }
