@@ -2,11 +2,11 @@
 	"cronJobs": [
 		{
 			"message": "Echa un vistazo a nuestro canal de Youtube => https://youtube.com/desarrolloutil",
-			"minutes": 10
+			"minutes": 13
 		},
 		{
 			"message": "Únete a Discord => https://discord.gg/TDcYzwNceK",
-			"minutes": 10
+			"minutes": 13
 		}
 	]
 }

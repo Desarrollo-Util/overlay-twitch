@@ -87,7 +87,9 @@ class TwitchChatClient implements ITwitchChatClient {
 
 			this._cronScheduler.addSimpleIntervalJob(
 				new SimpleIntervalJob(
-					{ minutes: cronJob.minutes + index * 0.5 },
+					{
+						minutes: cronJob.minutes * this.getRandomNumberBetween(0.8, 1.2),
+					},
 					taskJob
 				)
 			);
@@ -102,6 +104,10 @@ class TwitchChatClient implements ITwitchChatClient {
 			raidHandler(this._chatClient, this._twitchApiClient)
 		);
 		this._twitchApiClient.apiClient;
+	}
+
+	private getRandomNumberBetween(min: number, max: number) {
+		return Math.random() * (max - min) + min;
 	}
 }
 
