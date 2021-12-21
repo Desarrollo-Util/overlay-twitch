@@ -22,9 +22,9 @@ const RewardAlert: FC<RewardAlertProps> = ({ rewardEvent, nextAlert }) => {
 
 	return (
 		<div className='container-lg flex-c-c'>
-			<div className='box_wrapper'>
+			<div className='box__wrapper'>
 				<video
-					className={`box_video ${rendered ? 'box_video-rendered' : ''}`}
+					className={`box__video ${rendered ? 'box__video--rendered' : ''}`}
 					src={`${RewardAlertMedia[rewardEvent.reward]}?id=${rewardEvent.id}`}
 					controls={false}
 					onPlay={event => (event.currentTarget.volume = 0.05)}
@@ -32,12 +32,12 @@ const RewardAlert: FC<RewardAlertProps> = ({ rewardEvent, nextAlert }) => {
 					onEnded={() => setRendered(false)}
 				/>
 				<div
-					className={`box_borderUR ${
-						rendered ? 'box_borderUR-rendered' : ''
+					className={`box__borderUR ${
+						rendered ? 'box__borderUR--rendered' : ''
 					}`}></div>
 				<div
-					className={`box_innerDL ${
-						rendered ? 'box_innerDL-rendered' : ''
+					className={`box__innerDL ${
+						rendered ? 'box__innerDL--rendered' : ''
 					}`}></div>
 			</div>
 		</div>
@@ -48,7 +48,7 @@ const getTransitionEnd =
 	(nextAlert: () => void) =>
 	async (event: TransitionEvent<HTMLVideoElement>) => {
 		const videoElement = event.currentTarget;
-		if (videoElement.classList.contains('box_video-rendered'))
+		if (videoElement.classList.contains('box__video--rendered'))
 			setTimeout(() => videoElement.play(), 150);
 		else nextAlert();
 	};

@@ -14,15 +14,15 @@
 	@apply absolute w-2 h-1_75 top-2_125 -right-1 bg-bg-300;
 }
 
-.progBar__label__arrow {
+.progBar__arrow {
 	@apply absolute block overflow-hidden h-0_5 -top-0_5 w-0_75 left-0_625;
 }
 
-.progBar__label__arrow:before {
+.progBar__arrow:before {
 	@apply absolute w-0_5 h-0_5 top-0_25 left-0_125 bg-bg-300 rotate-45;
 	content: '';
 }
 
-.progBar__label__text {
+.progBar__text {
 	@apply block font-bold text-white text-center leading-6;
 }

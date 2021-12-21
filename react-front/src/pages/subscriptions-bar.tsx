@@ -72,8 +72,8 @@ const SubscriptionsBar: FC = () => {
 						style={{ width: `${barWidth}px` }}
 						className='progBar__filling'>
 						<div className='progBar__label'>
-							<div className='progBar__label__arrow'></div>
-							<span ref={textLabelRef} className='progBar__label__text'></span>
+							<div className='progBar__arrow'></div>
+							<span ref={textLabelRef} className='progBar__text'></span>
 						</div>
 					</div>
 				</div>

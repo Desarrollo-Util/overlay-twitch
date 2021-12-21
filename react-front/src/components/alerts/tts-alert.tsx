@@ -32,28 +32,29 @@ const TtsAlert: FC<TtsAlertProps> = ({ ttsEvent, nextAlert }) => {
 	}, [ttsEvent]);
 
 	return (
-		<div className='bar_wrapper'>
-			<div className='bar_container'>
-				<div className={`bar_upper ${rendered ? 'bar_upper-opened' : ''}`}>
+		<div className='bar__container'>
+			<div className='bar__wrapper'>
+				<div className={`bar__upper ${rendered ? 'bar__upper--opened' : ''}`}>
 					<span
-						className={`bar_upperText ${
-							rendered ? 'bar_upperText-opened' : ''
+						className={`bar__upperText ${
+							rendered ? 'bar__upperText--opened' : ''
 						}`}>
 						{TtsAlertTitles[ttsEvent.type]}
 					</span>
 				</div>
 				<div
 					onTransitionEnd={onTransitionEnd}
-					className={`bar_lower ${rendered ? 'bar_lower-opened' : ''}`}>
+					className={`bar__lower ${rendered ? 'bar__lower--opened' : ''}`}>
 					<span
-						className={`bar_lowerText ${
-							rendered ? 'bar_lowerText-opened' : ''
+						className={`bar__lowerText ${
+							rendered ? 'bar__lowerText--opened' : ''
 						}`}>
 						{ttsEvent.userName}
 					</span>
 				</div>
 			</div>
-			<span className={`bar_message ${rendered ? 'bar_message-opened' : ''}`}>
+			<span
+				className={`bar__message ${rendered ? 'bar__message--opened' : ''}`}>
 				{ttsEvent.message}
 			</span>
 			{tts && (
@@ -80,13 +81,13 @@ const getOnTransitionEnd =
 	async (ev: any) => {
 		if (
 			ev.pseudoElement === '::after' &&
-			ev.currentTarget?.classList.contains('bar_lower-opened')
+			ev.currentTarget?.classList.contains('bar__lower--opened')
 		) {
 			setTts(true);
 		} else if (
 			ev.target === ev.currentTarget &&
 			!ev.pseudoElement &&
-			!ev.currentTarget?.classList.contains('bar_lower-opened')
+			!ev.currentTarget?.classList.contains('bar__lower--opened')
 		) {
 			setTimeout(() => nextAlert(), 1000);
 		}
