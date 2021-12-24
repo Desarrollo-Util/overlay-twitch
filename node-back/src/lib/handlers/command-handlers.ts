@@ -31,6 +31,12 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 			'Nuestros canales de Youtube => https://www.youtube.com/c/desarrolloutil y https://www.youtube.com/c/pablocdev'
 		);
 	},
+	rrss: async () => {
+		await chatBot.say(
+			user.name,
+			'Nuestras RRSS => https://twitter.com/desarrollo_util https://www.instagram.com/desarrolloutil'
+		);
+	},
 	music: async () => {
 		await chatBot.say(
 			user.name,
