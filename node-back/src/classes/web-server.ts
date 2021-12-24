@@ -138,12 +138,13 @@ class WebServer implements IWebServer {
 						`Subscription message event -> ${name}; Cumulative months -> ${cumulativeMonths}`
 					);
 
-					if (messageText)
-						this._socketServer.emit(SocketTopics.SUBSCRIPTIONMESSAGE, {
-							userName: name,
-							message: messageText,
-							months: cumulativeMonths,
-						});
+					this._socketServer.emit(SocketTopics.SUBSCRIPTIONMESSAGE, {
+						userName: name,
+						message:
+							messageText ||
+							`${name} se ha suscrito por ${cumulativeMonths} meses, gracias por el apoyo`,
+						months: cumulativeMonths,
+					});
 				}
 			);
 
