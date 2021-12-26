@@ -3,7 +3,7 @@
 interface ImportMetaEnv {
 	readonly VITE_BACKEND_HOST: string;
 	readonly VITE_NODE_ENV: 'development' | 'production';
-	readonly VITE_SUBSCRIPTIONS_GOAL: number;
+	readonly VITE_SUBSCRIPTIONS_GOAL: string;
 }
 
 interface ImportMeta {
