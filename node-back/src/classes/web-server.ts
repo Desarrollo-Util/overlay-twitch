@@ -163,6 +163,40 @@ class WebServer implements IWebServer {
 				}
 			);
 
+			await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionGiftEvents(
+				this._twitchApiClient.user.id,
+				({
+					isAnonymous,
+					gifterDisplayName,
+					gifterName,
+					cumulativeAmount,
+					amount,
+				}) => {
+					const name = (!isAnonymous && gifterDisplayName) || gifterName;
+
+					const subCountMessage =
+						amount === 1 ? `${amount} suscripción` : `${amount} suscripciones`;
+					const congratMessage =
+						amount === 1
+							? 'Enhorabuena al afortunado'
+							: 'Enhorabuena a los afortunados';
+
+					if (name) {
+						this._socketServer.emit(SocketTopics.SUBSCRIPTIONMESSAGE, {
+							userName: name,
+							message: `${name} ha regalado ${subCountMessage}. Lleva un total de ${cumulativeAmount}. ${congratMessage} y muchas gracias por el apoyo guachín`,
+							months: cumulativeAmount,
+						});
+					} else {
+						this._socketServer.emit(SocketTopics.SUBSCRIPTIONMESSAGE, {
+							userName: name,
+							message: `Alguien anónimo ha regalado ${subCountMessage}. ${congratMessage} y muchas gracias por el apoyo Batman`,
+							months: cumulativeAmount,
+						});
+					}
+				}
+			);
+
 			await this._twitchEventClient.eventClient.subscribeToChannelSubscriptionEndEvents(
 				this._twitchApiClient.user.id,
 				({ userDisplayName, userName, isGift }) => {
