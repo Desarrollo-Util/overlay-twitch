@@ -85,12 +85,26 @@ const getHeroInfo = async (
 		}
 	);
 
+	const lastCheerResponse = await fetch(
+		`${import.meta.env.VITE_NODE_ENV === 'production' ? 'https' : 'http'}://${
+			import.meta.env.VITE_BACKEND_HOST
+		}/last-cheer`,
+		{
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+
 	const lastFollower: string = await lastFollowerResponse.json();
 	const lastSubscriber: string = await lastSubscriberResponse.json();
+	const lastCheer: string = await lastCheerResponse.json();
 
 	setHeroState({
 		[HeroTypes.FOLLOW]: lastFollower,
 		[HeroTypes.SUBSCRIPTION]: lastSubscriber,
+		[HeroTypes.CHEER]: lastCheer,
 	});
 };
 
