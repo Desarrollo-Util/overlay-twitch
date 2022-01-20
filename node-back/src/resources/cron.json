@@ -1,16 +1,16 @@
 {
 	"cronJobs": [
 		{
-			"message": "Nuestro canal de Youtube => https://youtube.com/desarrolloutil",
-			"minutes": 13
+			"message": "Nuestro canal de Youtube => youtube.com/desarrolloutil",
+			"minutes": 15
 		},
 		{
-			"message": "Únete a Discord => https://discord.gg/TDcYzwNceK",
-			"minutes": 13
+			"message": "Únete a Discord => discord.gg/TDcYzwNceK",
+			"minutes": 15
 		},
 		{
-			"message": "Nuestras RRSS => https://twitter.com/desarrollo_util https://www.instagram.com/desarrolloutil",
-			"minutes": 13
+			"message": "Nuestras RRSS => twitter.com/desarrollo_util www.instagram.com/desarrolloutil",
+			"minutes": 15
 		}
 	]
 }

@@ -11,41 +11,41 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	twitchApiClient: ApiClient
 ) => ({
 	git: async () => {
-		await chatBot.say(user.name, '/me https://github.com/Desarrollo-Util');
+		await chatBot.say(user.name, '/me github.com/Desarrollo-Util');
 	},
 	theme: async () => {
 		await chatBot.say(
 			user.name,
-			'/me El tema que usamos en VSCode es Monokai Vibrant, aquí te dejo el enlace -> https://marketplace.visualstudio.com/items?itemName=s3gf4ult.monokai-vibrant'
+			'/me El tema que usamos en VSCode es Monokai Vibrant, aquí te dejo el enlace -> marketplace.visualstudio.com/items?itemName=s3gf4ult.monokai-vibrant'
 		);
 	},
 	discord: async () => {
 		await chatBot.say(
 			user.name,
-			'Aquí tienes nuestro discord: https://discord.gg/TDcYzwNceK'
+			'Aquí tienes nuestro discord: discord.gg/TDcYzwNceK'
 		);
 	},
 	youtube: async () => {
 		await chatBot.say(
 			user.name,
-			'Nuestros canales de Youtube => https://www.youtube.com/c/desarrolloutil y https://www.youtube.com/c/pablocdev'
+			'Nuestros canales de Youtube => www.youtube.com/c/desarrolloutil y www.youtube.com/c/pablocdev'
 		);
 	},
-	rrss: async () => {
+	redes: async () => {
 		await chatBot.say(
 			user.name,
-			'Nuestras RRSS => https://twitter.com/desarrollo_util https://www.instagram.com/desarrolloutil'
+			'Nuestras RRSS => twitter.com/desarrollo_util instagram.com/desarrolloutil'
 		);
 	},
 	music: async () => {
 		await chatBot.say(
 			user.name,
-			'Música que solemos reproducir en el canal https://www.pretzel.rocks'
+			'Música que solemos reproducir en el canal www.pretzel.rocks'
 		);
 	},
 	culpa: async () => {
 		const { body } = await got.get(
-			`https://tmi.twitch.tv/group/user/${user.name}/chatters`,
+			`tmi.twitch.tv/group/user/${user.name}/chatters`,
 			{ responseType: 'json' }
 		);
 		const { viewers } = (body as TwitchTmiBody).chatters;
@@ -78,13 +78,19 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	beta: async () => {
 		await chatBot.say(
 			user.name,
-			'Puedes probar la beta de Learnthis aquí: https://learnthisdev.com'
+			'Puedes probar la beta de Learnthis aquí: learnthisdev.com'
+		);
+	},
+	project: async () => {
+		await chatBot.say(
+			user.name,
+			'El proyecto en el que estamos trabajando es FeedThis, una aplicación web para programar publicaciones en redes sociales. Utilizaremos React con Vite para el front y Node con Fastify para el back.'
 		);
 	},
 	help: async function help() {
 		await chatBot.say(
 			user.name,
-			'Comandos disponibles: !git !theme !discord !youtube !music !culpa !followage !beta'
+			'Comandos disponibles: !project !git !theme !discord !youtube !redes !music !culpa !followage !beta'
 		);
 	},
 });
@@ -101,7 +107,7 @@ export const getModCommandHandlers: GetCommandHandlers = (
 		if (channelToPromote && messageSplitted.length === 1) {
 			await chatBot.say(
 				user.name,
-				`/me La promosió de este bellísimo canal, seguidle y dadle cariño -> https://twitch.tv/${channelToPromote}`
+				`/me La promosió de este bellísimo canal, seguidle y dadle cariño -> twitch.tv/${channelToPromote}`
 			);
 		}
 	},
