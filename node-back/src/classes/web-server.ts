@@ -258,17 +258,9 @@ class WebServer implements IWebServer {
 
 	private async updateLastInfoFromAPI() {
 		const { apiClient, user } = this._twitchApiClient;
+
 		const { total: numberOfSubscriptions } =
 			await apiClient.subscriptions.getSubscriptions(user.id);
-
-		const subscriptionEvents =
-			await apiClient.subscriptions.getSubscriptionEventsForBroadcaster(
-				user.id
-			);
-
-		const lastSubscriber = subscriptionEvents.data.find(
-			({ eventType }) => eventType === 'subscriptions.subscribe'
-		);
 
 		const lastFollower = await apiClient.users.getFollows({
 			followedUser: user.id,
@@ -276,9 +268,10 @@ class WebServer implements IWebServer {
 		});
 
 		const oldLastInfo = await this.readLastInfo();
+
 		this._lastInfo = {
 			numberOfSubscriptions,
-			lastSubscriber: lastSubscriber ? lastSubscriber.userDisplayName : '',
+			lastSubscriber: oldLastInfo.lastSubscriber || '',
 			lastFollower: lastFollower.data[0]
 				? lastFollower.data[0].userDisplayName
 				: '',

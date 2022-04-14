@@ -75,22 +75,22 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 			);
 		}
 	},
-	beta: async () => {
-		await chatBot.say(
-			user.name,
-			'Puedes probar la beta de Learnthis aquí: learnthisdev.com'
-		);
-	},
 	project: async () => {
 		await chatBot.say(
 			user.name,
 			'El proyecto en el que estamos trabajando es FeedThis, una aplicación web para programar publicaciones en redes sociales. Utilizaremos React con Vite para el front y Node con Fastify para el back.'
 		);
 	},
+	learnthis: async () => {
+		await chatBot.say(
+			user.name,
+			'Nuestra plataforma de elearning: https://learnthisacademy.com'
+		);
+	},
 	help: async function help() {
 		await chatBot.say(
 			user.name,
-			'Comandos disponibles: !project !git !theme !discord !youtube !redes !music !culpa !followage !beta'
+			'Comandos disponibles: !learnthis !project !git !theme !discord !youtube !redes !music !culpa !followage'
 		);
 	},
 });
