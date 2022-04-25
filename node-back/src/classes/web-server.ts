@@ -154,6 +154,8 @@ class WebServer implements IWebServer {
 					const name = userName || userDisplayName;
 
 					this._lastInfo.numberOfSubscriptions += 1;
+					this._lastInfo.lastSubscriber = name;
+
 					this._twitchEventClient.logger.info(
 						`Subscription event -> ${name}; Is gift -> ${isGift}`
 					);
@@ -201,6 +203,8 @@ class WebServer implements IWebServer {
 				this._twitchApiClient.user.id,
 				({ userDisplayName, userName, isGift }) => {
 					const name = userName || userDisplayName;
+
+					this._lastInfo.numberOfSubscriptions -= 1;
 
 					this._twitchEventClient.logger.info(
 						`Subscription end event -> ${name}; Is gift -> ${isGift}`
