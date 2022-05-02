@@ -21,3 +21,7 @@ export type CheerResponse = {
 export type RewardResponse = {
 	reward: RewardTypes;
 } & GenericResponse;
+
+export type RaidResponse = {
+	viewers: number;
+} & GenericResponse;

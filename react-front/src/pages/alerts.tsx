@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import uuid from 'uuid-random';
 import FollowAlert from '../components/alerts/follow-alert';
+import RaidAlert from '../components/alerts/raid-alert';
 import RewardAlert from '../components/alerts/reward-alert';
 import TtsAlert from '../components/alerts/tts-alert';
 import { SocketTopics } from '../constants/alert-types.enum';
@@ -10,12 +11,14 @@ import {
 	AlertEvent,
 	CheerEvent,
 	FollowEvent,
+	RaidEvent,
 	RewardEvent,
 	SubscriptionMessageEvent,
 } from '../types/alert-event.type';
 import {
 	CheerResponse,
 	FollowResponse,
+	RaidResponse,
 	RewardResponse,
 	SubscriptionMessageResponse,
 } from '../types/socket-response.type';
@@ -28,6 +31,7 @@ const Alerts = () => {
 	const subscriptionMessageHandler = getSubscriptionMessageHandler(addNewAlert);
 	const cheerHandler = getCheerHandler(addNewAlert);
 	const rewardsHandler = getRewardsHandler(addNewAlert);
+	const raidHandler = getRaidHandler(addNewAlert);
 
 	useEffect(() => {
 		socketClient.on(SocketTopics.FOLLOW, followHandler);
@@ -37,6 +41,7 @@ const Alerts = () => {
 		);
 		socketClient.on(SocketTopics.CHEER, cheerHandler);
 		socketClient.on(SocketTopics.REWARDS, rewardsHandler);
+		socketClient.on(SocketTopics.RAID, raidHandler);
 
 		return () => {
 			socketClient.off(SocketTopics.FOLLOW, followHandler);
@@ -46,6 +51,7 @@ const Alerts = () => {
 			);
 			socketClient.off(SocketTopics.CHEER, cheerHandler);
 			socketClient.off(SocketTopics.REWARDS, rewardsHandler);
+			socketClient.off(SocketTopics.RAID, raidHandler);
 		};
 	}, []);
 
@@ -68,6 +74,19 @@ const Alerts = () => {
 		return (
 			<RewardAlert
 				rewardEvent={alertQueue.currentEvent}
+				nextAlert={nextAlert}
+			/>
+		);
+
+	if (alertQueue.currentEvent?.type === SocketTopics.RAID)
+		return (
+			<RaidAlert
+				raidEvent={{
+					id: 'dsadsdaw3',
+					type: SocketTopics.RAID,
+					userName: 'Mariano',
+					viewers: 99,
+				}}
 				nextAlert={nextAlert}
 			/>
 		);
@@ -125,6 +144,19 @@ const getRewardsHandler =
 			userName,
 			type: SocketTopics.REWARDS,
 			reward,
+		};
+
+		addNewAlert(newAlert);
+	};
+
+const getRaidHandler =
+	(addNewAlert: (newEvent: AlertEvent) => void) =>
+	({ userName, viewers }: RaidResponse) => {
+		const newAlert: RaidEvent = {
+			id: uuid(),
+			userName,
+			type: SocketTopics.RAID,
+			viewers,
 		};
 
 		addNewAlert(newAlert);

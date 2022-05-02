@@ -10,6 +10,7 @@ import iocSymbols from 'ioc-symbols';
 import { join } from 'path';
 import { AsyncTask, SimpleIntervalJob, ToadScheduler } from 'toad-scheduler';
 import { CronJob } from 'types/cron-jobs.type';
+import { Server as SocketServer } from 'socket.io';
 
 /** Twitch chat client */
 @injectable()
@@ -51,7 +52,6 @@ class TwitchChatClient implements ITwitchChatClient {
 	protected async initializeChat() {
 		await this.connectChat();
 		await this.startCronJobs();
-		this.startChatHandlers();
 	}
 
 	private async connectChat() {
@@ -96,12 +96,12 @@ class TwitchChatClient implements ITwitchChatClient {
 		}
 	}
 
-	private startChatHandlers() {
+	public startChatHandlers(socketServer: SocketServer) {
 		this._chatClient.onMessage(
 			chatMessageHandler(this._chatClient, this._twitchApiClient)
 		);
 		this._chatClient.onRaid(
-			raidHandler(this._chatClient, this._twitchApiClient)
+			raidHandler(this._chatClient, this._twitchApiClient, socketServer)
 		);
 		this._twitchApiClient.apiClient;
 	}

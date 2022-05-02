@@ -1,10 +1,18 @@
 /* Reward alert styles */
-.box__wrapper {
+.box__wrapper,
+.box__raid_wrapper {
 	@apply relative flex-c-c overflow-hidden p-0_125;
 	--transition-duration: 350ms;
 	--first-delay: 500ms;
 	--box-width: 20rem;
 	--box-height: 11.25rem;
+	width: var(--box-width);
+	height: var(--box-height);
+}
+
+.box__raid_wrapper {
+	--box-width: 40rem;
+	--box-height: 16.85rem;
 	width: var(--box-width);
 	height: var(--box-height);
 }

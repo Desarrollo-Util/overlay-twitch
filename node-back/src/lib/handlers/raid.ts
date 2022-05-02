@@ -1,9 +1,17 @@
 import ITwitchApiClient from '@Interfaces/twitch-api-client.interface';
 import { ChatClient, ChatRaidInfo, UserNotice } from '@twurple/chat';
+import SocketTopics from 'constants/socket-topics.enum';
+import { Server as SocketServer } from 'socket.io';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 const raidHandler = (
 	chatClient: ChatClient,
-	twitchApiClient: ITwitchApiClient
+	twitchApiClient: ITwitchApiClient,
+	socketServer: SocketServer<
+		DefaultEventsMap,
+		DefaultEventsMap,
+		DefaultEventsMap
+	>
 ) => {
 	return async (
 		channel: string,
@@ -13,6 +21,12 @@ const raidHandler = (
 	) => {
 		const { apiClient } = twitchApiClient;
 		const stream = await apiClient.streams.getStreamByUserName(userName);
+		raidInfo.viewerCount;
+
+		socketServer.emit(SocketTopics.RAID, {
+			userName,
+			viewers: raidInfo.viewerCount,
+		});
 
 		if (stream) {
 			await chatClient.say(

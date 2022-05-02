@@ -5,6 +5,7 @@ enum SocketTopics {
 	ENDSUBSCRIPTION = 'ENDSUBSCRIPTION',
 	CHEER = 'CHEER',
 	REWARDS = 'REWARDS',
+	RAID = 'RAID',
 }
 
 export default SocketTopics;

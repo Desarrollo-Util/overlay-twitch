@@ -18,6 +18,11 @@ export type SubscriptionEvent = {
 	type: SocketTopics.SUBSCRIPTION;
 } & GenericEvent;
 
+export type RaidEvent = {
+	type: SocketTopics.RAID;
+	viewers: number;
+} & GenericEvent;
+
 export type SubscriptionEndEvent = {
 	type: SocketTopics.ENDSUBSCRIPTION;
 } & GenericEvent;
@@ -45,4 +50,5 @@ export type AlertEvent =
 	| SubscriptionEndEvent
 	| SubscriptionMessageEvent
 	| CheerEvent
-	| RewardEvent;
+	| RewardEvent
+	| RaidEvent;

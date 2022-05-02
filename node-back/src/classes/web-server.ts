@@ -60,6 +60,8 @@ class WebServer implements IWebServer {
 			},
 		});
 
+		this._twitchChatClient.startChatHandlers(this._socketServer);
+
 		this._socketServer.on('connection', socket => {
 			this._logger.info(`A user with socket id ${socket.id} has connected`);
 		});
