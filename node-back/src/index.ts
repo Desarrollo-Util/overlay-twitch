@@ -86,9 +86,7 @@ const startServer = async () => {
 	//#endregion
 
 	//#region Web server
-
 	iocContainer.bind<IWebServer>(iocSymbols.WebServer).to(WebServer);
-
 
 	const webServer = await iocContainer.getAsync<IWebServer>(
 		iocSymbols.WebServer

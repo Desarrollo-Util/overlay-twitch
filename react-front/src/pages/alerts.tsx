@@ -80,15 +80,7 @@ const Alerts = () => {
 
 	if (alertQueue.currentEvent?.type === SocketTopics.RAID)
 		return (
-			<RaidAlert
-				raidEvent={{
-					id: 'dsadsdaw3',
-					type: SocketTopics.RAID,
-					userName: 'Mariano',
-					viewers: 99,
-				}}
-				nextAlert={nextAlert}
-			/>
+			<RaidAlert raidEvent={alertQueue.currentEvent} nextAlert={nextAlert} />
 		);
 
 	return null;

@@ -103,7 +103,6 @@ class TwitchChatClient implements ITwitchChatClient {
 		this._chatClient.onRaid(
 			raidHandler(this._chatClient, this._twitchApiClient, socketServer)
 		);
-		this._twitchApiClient.apiClient;
 	}
 
 	private getRandomNumberBetween(min: number, max: number) {

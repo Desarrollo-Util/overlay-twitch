@@ -21,7 +21,6 @@ const raidHandler = (
 	) => {
 		const { apiClient } = twitchApiClient;
 		const stream = await apiClient.streams.getStreamByUserName(userName);
-		raidInfo.viewerCount;
 
 		socketServer.emit(SocketTopics.RAID, {
 			userName,
