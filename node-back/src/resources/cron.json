@@ -9,7 +9,11 @@
 			"minutes": 15
 		},
 		{
-			"message": "Nuestras RRSS => twitter.com/desarrollo_util www.instagram.com/desarrolloutil",
+			"message": "Nuestras RRSS => twitter.com/desarrollo_util instagram.com/desarrolloutil",
+			"minutes": 15
+		},
+		{
+			"message": "10% de descuento en los cursos de Dorian con el código desarrolloutil => cursos.doriandesings.com",
 			"minutes": 15
 		}
 	]

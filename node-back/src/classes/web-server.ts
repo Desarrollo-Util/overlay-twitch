@@ -115,7 +115,7 @@ class WebServer implements IWebServer {
 					const webhook = new WebhookClient({ url: this._discordWebhookUrl });
 
 					await webhook.send(
-						`@everyone ${stream.title} - Ya estamos en directo, pásate!! -> https://www.twitch.tv/desarrolloutil`
+						`@everyone ${stream.title} - Ya estamos en directo, pásate!! -> https://twitch.tv/desarrolloutil`
 					);
 				}
 			);

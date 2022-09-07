@@ -28,7 +28,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	youtube: async () => {
 		await chatBot.say(
 			user.name,
-			'Nuestros canales de Youtube => www.youtube.com/c/desarrolloutil y www.youtube.com/c/pablocdev'
+			'Nuestros canales de Youtube => youtube.com/c/desarrolloutil y youtube.com/c/pablocdev'
 		);
 	},
 	redes: async () => {
@@ -78,7 +78,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	project: async () => {
 		await chatBot.say(
 			user.name,
-			'El proyecto en el que estamos trabajando es FeedThis, una aplicación web para programar publicaciones en redes sociales. Utilizaremos React con Vite para el front y Node con Fastify para el back.'
+			'El proyecto en el que estamos trabajando es Memesplash, una aplicación web para programar publicaciones en redes sociales. Utilizaremos React con Next.JS para el front y Node para el back. Consulta los proyectos en github.com/Desarrollo-Util/memesplash y github.com/Desarrollo-Util/front-memesplash'
 		);
 	},
 	learnthis: async () => {

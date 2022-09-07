@@ -53,7 +53,7 @@ const startServer = async () => {
 		.toConstantValue(process.env['WEBHOOK_SECRET'] as string);
 	iocContainer
 		.bind<string>(iocSymbols.Hostname)
-		.toConstantValue(process.env['HOSTNAME'] as string);
+		.toConstantValue(process.env['PUBLIC_HOSTNAME'] as string);
 	iocContainer
 		.bind<number>(iocSymbols.PortEventSub)
 		.toConstantValue(Number(process.env['PORT_EVENTSUB'] as string));
