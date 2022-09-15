@@ -78,7 +78,7 @@ export const getCommonCommandHandlers: GetCommandHandlers = (
 	project: async () => {
 		await chatBot.say(
 			user.name,
-			'El proyecto en el que estamos trabajando es Memesplash, una aplicación web para programar publicaciones en redes sociales. Utilizaremos React con Next.JS para el front y Node para el back. Consulta los proyectos en github.com/Desarrollo-Util/memesplash y github.com/Desarrollo-Util/front-memesplash'
+			'El proyecto en el que estamos trabajando es Memesplash, una aplicación web para publicar memes basado en un proyecto de DevChallenges. Utilizaremos React con Next.JS para el front y Node para el back. Consulta los proyectos en github.com/Desarrollo-Util/memesplash y github.com/Desarrollo-Util/front-memesplash'
 		);
 	},
 	learnthis: async () => {
